@@ -26,9 +26,11 @@
               </button>
             </div>
             <div class="modal-body">
-              <video id="qr-reader" style="width: 100%;"></video>
-              <div id="scanner-overlay"></div>
-            </div>
+                <div id="scanner-container">
+                  <video id="qr-reader" style="width: 100%;"></video>
+                  <div id="scanner-overlay"></div>
+                </div>
+              </div>              
           </div>
         </div>
       </div>      
@@ -38,6 +40,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.0.3/html5-qrcode.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script src="script.js"></script>
+  <script src="script.js" type="module"></script>
 </body>
 </html>
