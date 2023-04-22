@@ -65,4 +65,10 @@ document.getElementById('scan-qr').addEventListener('click', () => {
         alert('Error: ' + error);
       });
   });
+
+  $('#scan-modal').on('hidden.bs.modal', () => {
+    qrScanner.stop().catch((error) => {
+      console.error('Error stopping the scanner:', error);
+    });
+  });
   
