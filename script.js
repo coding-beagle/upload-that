@@ -44,6 +44,8 @@ document.getElementById('scan-qr').addEventListener('click', () => {
     videoElement.style.width = '100%';
     videoElement.id = 'qr-reader'; // Add this line
     document.body.appendChild(videoElement);
+
+    $('#scan-modal').modal('show');
   
     const qrScanner = new Html5Qrcode('qr-reader', { fps: 10, qrbox: 250 });
     
