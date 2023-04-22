@@ -1,3 +1,14 @@
+// Add this code snippet to the top of your script.js file
+document.addEventListener('DOMContentLoaded', () => {
+    if (isMobile()) {
+      document.getElementById('scan-qr').classList.remove('d-none');
+    }
+  });
+  
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  }
+
 document.getElementById('generate-qr').addEventListener('click', () => {
     const randomBase64 = generateRandomBase64(16); // 16 is the length of the random string
     const qrElement = document.getElementById('qr-code');
@@ -26,4 +37,30 @@ document.getElementById('generate-qr').addEventListener('click', () => {
   
     return result;
   }
+
+  // Replace the previous event listener in your script.js file with this one
+document.getElementById('scan-qr').addEventListener('click', () => {
+    const videoElement = document.createElement('video');
+    videoElement.style.width = '100%';
+    videoElement.id = 'qr-reader'; // Add this line
+    document.body.appendChild(videoElement);
+  
+    const qrScanner = new Html5Qrcode('qr-reader', { fps: 10, qrbox: 250 });
+    
+    qrScanner.start(
+        { facingMode: 'environment' },
+        (decodedText) => {
+          alert('Scanned QR code: ' + decodedText);
+          qrScanner.stop().then(() => {
+            document.body.removeChild(videoElement);
+          });
+        },
+        (error) => {
+          alert('Error: ' + error);
+        }
+      )
+      .catch((error) => {
+        alert('Error: ' + error);
+      });
+  });
   
