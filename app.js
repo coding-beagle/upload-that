@@ -73,8 +73,8 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('fileDeleted', (fileId) => {
-  socket.to(roomId).emit('fileDeletion', fileId);
+  socket.on('fileDeleted', (deletedRoomId, fileId) => {
+  socket.to(deletedRoomId).emit('fileDeletion', fileId);
   });
 });
 
