@@ -32,16 +32,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
+  let roomId; // Define roomId in the outer scope
 
   socket.on('joinRoom', (roomId) => {
-    console.log('User joined room:', roomId);
+    roomId = room; // Update roomId when a user joins a room
     socket.join(roomId);
     socket.to(roomId).emit('userJoined');
   });
 
   socket.on('fileUploaded', (roomId) => {
-    console.log('File uploaded in room:', roomId);
     socket.to(roomId).emit('fetchFiles');
   });
 
