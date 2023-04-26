@@ -56,3 +56,20 @@ body {
     right: 20px;
     z-index: 1000;
   }
+
+  .file-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 1rem;
+  }
+  
+  .file-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .file-item button {
+    margin-top: auto;
+  }
+  

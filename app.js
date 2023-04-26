@@ -37,6 +37,7 @@ io.on('connection', (socket) => {
   socket.on('joinRoom', (roomId) => {
     console.log('User joined room:', roomId);
     socket.join(roomId);
+    socket.to(roomId).emit('userJoined');
   });
 
   socket.on('fileUploaded', (roomId) => {
@@ -51,6 +52,7 @@ io.on('connection', (socket) => {
   socket.on('leaveRoom', async (roomId) => {
     console.log('User left room:', roomId);
     socket.leave(roomId);
+    socket.to(roomId).emit('userLeft');
 
     const clients = await io.in(roomId).fetchSockets();
     if (clients.length === 0) {

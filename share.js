@@ -17,19 +17,16 @@ socket.on("fetchFiles", async () => {
   });
 });
 
-socket.on('connection', () => {
+socket.on('userJoined', () => {
   createPopup('A device has joined the session', 'lightgreen');
-
-  console.log("Connection Triggered");
 
   $(document).ready(function () {
     $("#qrCodeModal").modal("hide");
   });
 });
 
-socket.on('disconnect', () => {
+socket.on('userLeft', () => {
   createPopup('A device has left the session', 'lightcoral');
-  console.log("Disconnect Triggered");
 });
 
 
@@ -125,15 +122,6 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   fileNameElement.textContent = fileDisplayName; // Update the reference here
   fileElement.appendChild(fileNameElement);
 
-  // Create a download link for all file types
-  const downloadButton = document.createElement('button');
-  downloadButton.className = 'btn btn-primary btn-sm ml-2';
-  downloadButton.innerHTML = '<i class="fas fa-download"></i>';
-  downloadButton.addEventListener('click', () => {
-    window.location.href = `${API_BASE_URL}/download/${fileId}`;
-  });
-  fileElement.appendChild(downloadButton);
-
   if (fileType.startsWith('image/')) {
     createImagePreview(fileId, fileElement);
   } else {
@@ -143,6 +131,15 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
     downloadLink.download = fileDisplayName; // Update the reference here
     fileElement.appendChild(downloadLink);
   }
+
+  // Create a download link for all file types
+  const downloadButton = document.createElement('button');
+  downloadButton.className = 'btn btn-primary btn-sm ml-2';
+  downloadButton.innerHTML = '<i class="fas fa-download"></i>';
+  downloadButton.addEventListener('click', () => {
+    window.location.href = `${API_BASE_URL}/download/${fileId}`;
+  });
+  fileElement.appendChild(downloadButton);
 
   const removeButton = document.createElement('button');
   removeButton.className = 'btn btn-danger btn-sm ml-2';
