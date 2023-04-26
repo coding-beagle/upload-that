@@ -232,13 +232,10 @@ function isMobile() {
 
 createQRCode();
 
-$(document).ready(function () {
-  $("#qrCodeModal").modal("show");
-});
 
-if(isMobile()) {
+if(!(isMobile())) {
   $(document).ready(function () {
-    $("#qrCodeModal").modal("hide");
+    $("#qrCodeModal").modal("show");
   });
 }
 
