@@ -1,5 +1,6 @@
 const API_BASE_URL = 'http://upload-that.onrender.com';
-const randomBase64 = window.location.pathname.split('/').pop();
+const urlParams = new URLSearchParams(window.location.search);
+const randomBase64 = urlParams.get('id');
 
 // Generate the QR code and display it in the qr-code div
 const qrElement = document.getElementById('qr-code');
