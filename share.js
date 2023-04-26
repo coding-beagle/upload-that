@@ -37,7 +37,9 @@ async function uploadFile(file) {
     throw new Error('An error occurred while uploading the file');
   }
 
-  const result = await response.json();
+  const responseText = await response.text();
+  console.log("Server response:", responseText);
+  const result = JSON.parse(responseText);
   return result.file_id;
 }
 
