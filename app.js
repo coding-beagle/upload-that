@@ -66,7 +66,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 
     const query = `
       INSERT INTO files (qr_code_id, file_name, file_size, file_content, file_type)
-      VALUES ($1, $2, $3, $4)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING id
     `;
 
