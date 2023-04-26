@@ -17,47 +17,8 @@ app.use(express.urlencoded({ extended: true }));
 // Configure Multer for file uploads
 const upload = multer({ storage: multer.memoryStorage() });
 
-const initializeDatabase = async () => {
-  try {
-    const tableExistsQuery = `
-      SELECT EXISTS (
-        SELECT FROM information_schema.tables 
-        WHERE table_schema = 'public'
-        AND table_name = 'files'
-      );
-    `;
-
-    const result = await pool.query(tableExistsQuery);
-    const tableExists = result.rows[0].exists;
-
-    if (!tableExists) {
-      const createTableQuery = `
-        CREATE TABLE files (
-          id SERIAL PRIMARY KEY,
-          qr_code_id VARCHAR(255) NOT NULL,
-          file_name VARCHAR(255) NOT NULL,
-          file_size BIGINT NOT NULL,
-          file_content BYTEA NOT NULL,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-      `;
-
-      await pool.query(createTableQuery);
-      console.log("Files table created successfully.");
-    }
-  } catch (error) {
-    console.error("Error initializing database:", error);
-  }
-};
-
-initializeDatabase()
-  .then(() => {
-    app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
-    });
-  })
-  .catch((error) => {
-    console.error("Failed to start server:", error);
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
   });
 
 app.post('/upload', upload.single('file'), async (req, res) => {

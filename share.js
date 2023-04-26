@@ -26,7 +26,7 @@ document.getElementById('file-input').addEventListener('change', async (event) =
 async function uploadFile(file) {
   const formData = new FormData();
   formData.append('file', file);
-  formData.append('qr_code_id', 'your_qr_code_id_here');
+  formData.append('qr_code_id', `${randomBase64}`);
 
   const response = await fetch(`${API_BASE_URL}/upload`, {
     method: 'POST',
