@@ -181,7 +181,7 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
     fileName = fileName.substring(0, maxFileNameLength) + '...' + fileExtension;
   }
 
-  fileNameElement.textContent = fileDisplayName; // Update the reference here
+  fileNameElement.textContent = fileName;
   fileElement.appendChild(fileNameElement);
 
   const fileContentElement = document.createElement('div');
