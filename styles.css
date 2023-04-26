@@ -66,10 +66,12 @@ body {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    gap: 4px; /* Adjust this value to change the spacing between the buttons */
   }
   
   .file-item button {
-    margin-top: 0;
+    flex: 1;
+    max-width: 48%; /* adjust this value to change the maximum width of buttons */
   }
   
   .loader-container {
