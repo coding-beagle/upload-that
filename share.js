@@ -1,6 +1,19 @@
 const API_BASE_URL = 'https://uploadthat-service.onrender.com';
 const urlParams = new URLSearchParams(window.location.search);
 const randomBase64 = urlParams.get('id');
+import { io } from "socket.io-client";
+const socket = io(API_BASE_URL);
+
+socket.on("connect", () => {
+  console.log("Connected to server:", socket.id);
+  socket.emit("joinRoom", randomBase64);
+});
+
+socket.on("fetchFiles", async () => {
+  console.log("New file uploaded, fetching files...");
+  const files = await fetchFiles(randomBase64);
+  displayFile(file, fileId);
+});
 
 // Generate the QR code and display it in the qr-code div
 const qrElement = document.getElementById('qr-code');
@@ -13,6 +26,22 @@ const qrCode = new QRCode(qrElement, {
   correctLevel: QRCode.CorrectLevel.H,
 });
 
+async function fetchFiles(qrCodeId) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/files/${qrCodeId}`);
+
+    if (!response.ok) {
+      throw new Error('An error occurred while fetching the files');
+    }
+
+    const files = await response.json();
+    return files;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 document.getElementById('file-input').addEventListener('change', async (event) => {
   const fileList = event.target.files;
 
@@ -20,6 +49,9 @@ document.getElementById('file-input').addEventListener('change', async (event) =
     const file = fileList[0];
     const fileId = await uploadFile(file);
     displayFile(file, fileId);
+    
+    // Notify the server that a new file was uploaded
+    socket.emit("fileUploaded", randomBase64);
   }
 });
 

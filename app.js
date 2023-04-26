@@ -3,6 +3,14 @@ const multer = require('multer');
 const { Pool } = require('pg');
 const cors = require('cors');
 
+const http = require('http').Server(app);
+const io = require('socket.io')(http, {
+  cors: {
+    origin: "https://upload-that.onrender.com", // Replace "*" with your client-side URL to restrict origins
+    methods: ["GET", "POST"]
+  }
+});
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -13,6 +21,24 @@ const pool = new Pool({
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+io.on('connection', (socket) => {
+  console.log('User connected:', socket.id);
+
+  socket.on('joinRoom', (roomId) => {
+    console.log('User joined room:', roomId);
+    socket.join(roomId);
+  });
+
+  socket.on('fileUploaded', (roomId) => {
+    console.log('File uploaded in room:', roomId);
+    socket.to(roomId).emit('fetchFiles');
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
 
 // Configure Multer for file uploads
 const upload = multer({ storage: multer.memoryStorage() });
