@@ -78,7 +78,7 @@ async function uploadFile(file) {
   return result.file_id;
 }
 
-function displayFile(fileName, fileSize, fileType, fileId) {
+function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   const fileElement = document.createElement('div');
   fileElement.className = 'file-item';
   fileElement.setAttribute('data-file-id', fileId); // Add this line
