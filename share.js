@@ -27,29 +27,12 @@ socket.on('userLeft', () => {
   createPopup('A device has left the session', 'lightcoral');
 });
 
-socket.on('fileDeleted', async () => {
-  const files = await fetchFiles(randomBase64);
-
-  // logic to find files that should be deleted
-  const displayedFiles = new Set(); // Create a Set to store the IDs of displayed files
-  document.querySelectorAll('.file-list .file').forEach(file => {
-    displayedFiles.add(file.dataset.fileId);
-  });
-
-  files.forEach(file => {
-    if (!displayedFiles.has(file.id)) {
-    // If the file's ID is not in the Set, display the file
-    displayFile(file.file_name, file.file_size, file.file_type, file.id);
-  }
-  });
-
-  // Loop through the remaining displayed file IDs in the Set and remove them
-displayedFiles.forEach(fileId => {
+socket.on('fileDeleted', async (fileId) => {
+  // Remove the deleted file from the displayed files
   const fileElement = document.querySelector(`.file[data-file-id="${fileId}"]`);
   if (fileElement) {
     fileElement.remove();
   }
-  });
 });
 
 // Generate the QR code and display it in the qr-code div

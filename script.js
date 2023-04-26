@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
     const videoElement = document.getElementById('qr-reader');
     qrScanner = new QrScanner(videoElement, (decodedText) => {
-      const targetUrl = `https://upload-that.onrender.com/share.html?id=${decodedText}`;
+      const targetUrl = `${decodedText}`;
       window.location.href = targetUrl;
     });
   
