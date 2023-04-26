@@ -90,7 +90,7 @@ function displayFile(fileId, fileDisplayName, fileSize, fileType) {
   fileName.textContent = fileDisplayName;
   fileElement.appendChild(fileName);
 
-  if ((file.type || fileType).startsWith('image/')) {
+  if (fileType.startsWith('image/')) {
     createImagePreview(file, fileElement);
   } else {
     const downloadLink = document.createElement('a');
