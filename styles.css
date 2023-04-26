@@ -51,12 +51,24 @@ body {
   
   .file-item {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
+  }
+  
+  .file-item .file-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+  }
+  
+  .file-item .buttons {
+    display: flex;
     justify-content: space-between;
+    width: 100%;
   }
   
   .file-item button {
-    margin-top: auto;
+    margin-top: 0;
   }
   
