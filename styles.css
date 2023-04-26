@@ -20,6 +20,29 @@ body {
     color: #666;
   }
   
+  .feature-grid {
+    margin-top: 2rem;
+  }
+  
+  .feature-grid .col {
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+  }
+  
+  .feature-grid p {
+    font-size: 3.6rem;
+    margin-bottom: 0.2rem;
+    width: auto;
+  }  
+
+  .feature-grid .icon-container {
+    display: inline-block;
+    width: 6rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   #qr-code {
     display: flex;
     justify-content: center;
@@ -71,7 +94,7 @@ body {
   
   .file-item button {
     flex: 1;
-    max-width: 48%; /* adjust this value to change the maximum width of buttons */
+    max-width: 2%; /* adjust this value to change the maximum width of buttons */
   }
   
   .loader-container {
