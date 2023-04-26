@@ -5,12 +5,10 @@ const socket = io(API_BASE_URL);
 const link = `${window.location.origin}/share.html?id=${randomBase64}`;
 
 socket.on("connect", () => {
-  console.log("Connected to server:", socket.id);
   socket.emit("joinRoom", randomBase64);
 });
 
 socket.on("fetchFiles", async () => {
-  console.log("New file uploaded, fetching files...");
   const files = await fetchFiles(randomBase64);
   files.forEach(file => {
     displayFile(file.file_name, file.file_size, file.file_type, file.id);
@@ -29,6 +27,12 @@ socket.on('userLeft', () => {
   createPopup('A device has left the session', 'lightcoral');
 });
 
+socket.on('fileDeleted', async () => {
+  const files = await fetchFiles(randomBase64);
+  files.forEach(file => {
+    displayFile(file.file_name, file.file_size, file.file_type, file.id);
+  });
+});
 
 // Generate the QR code and display it in the qr-code div
 const qrCodeElement = document.getElementById("qr-code");
@@ -90,8 +94,6 @@ async function uploadFile(file) {
   formData.append('file', file);
   formData.append('qr_code_id', `${randomBase64}`);
 
-  console.log(formData);
-
   const response = await fetch(`${API_BASE_URL}/upload`, {
     method: 'POST',
     body: formData,
@@ -102,7 +104,6 @@ async function uploadFile(file) {
   }
 
   const responseText = await response.text();
-  console.log("Server response:", responseText);
   const result = JSON.parse(responseText);
   return result.file_id;
 }
@@ -204,7 +205,7 @@ function createPopup(message, bgColor) {
     popup.style.opacity = '0';
     setTimeout(() => {
       document.body.removeChild(popup);
-    }, 5000);
+    }, 10000);
   }, 100);
 }
 

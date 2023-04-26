@@ -46,11 +46,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
+    if (roomId) {
+      socket.emit('leaveRoom', roomId);
+    }
   });
 
   socket.on('leaveRoom', async (roomId) => {
-    console.log('User left room:', roomId);
     socket.leave(roomId);
     socket.to(roomId).emit('userLeft');
 
@@ -62,7 +63,6 @@ io.on('connection', (socket) => {
           WHERE qr_code_id = $1
         `;
         await pool.query(query, [roomId]);
-        console.log(`Deleted all files with QR code ID: ${roomId}`);
       } catch (error) {
         console.error(error);
       }
@@ -70,8 +70,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('fileDeleted', (roomId, fileId) => {
-    console.log('File deleted in room:', roomId, fileId);
-    socket.to(roomId).emit('fetchFiles');
+  socket.to(roomId).emit('fetchFiles');
   });
 });
 
@@ -84,9 +83,6 @@ http.listen(port, () => {
 
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
-    console.log('Request Body:', req.body);
-    console.log('Request File:', req.file);
-
     const { qr_code_id } = req.body;
     const { originalname: file_name, mimetype: file_type, size: file_size, buffer: file_content } = req.file;
 
@@ -97,11 +93,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     `;
 
     const result = await pool.query(query, [qr_code_id, file_name, file_size, file_content, file_type]);
-    console.log('Result Rows:', result.rows);
-
     const file_id = result.rows[0].id;
 
-    console.log('Response data:', { message: 'File uploaded successfully', file_id });
     res.status(201).json({ message: 'File uploaded successfully', file_id });    
   } catch (error) {
     console.error(error);
