@@ -157,7 +157,7 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
 
   const fileNameElement = document.createElement('p'); // Rename this variable
   fileNameElement.textContent = fileDisplayName; // Update the reference here
-  fileContentElement.appendChild(fileNameElement);
+  fileElement.appendChild(fileNameElement);
 
   const fileContentElement = document.createElement('div');
   fileContentElement.className = 'file-content';
