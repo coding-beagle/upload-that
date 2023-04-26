@@ -81,13 +81,13 @@ async function uploadFile(file) {
   return result.file_id;
 }
 
-function displayFile(fileId, fileName, fileSize, fileType) {
+function displayFile(fileId, fileDisplayName, fileSize, fileType) {
   const fileElement = document.createElement('div');
   fileElement.className = 'file-item';
   fileElement.setAttribute('data-file-id', fileId); // Add this line
 
   const fileName = document.createElement('p');
-  fileName.textContent = file.name;
+  fileName.textContent = fileDisplayName;
   fileElement.appendChild(fileName);
 
   if ((file.type || fileType).startsWith('image/')) {
