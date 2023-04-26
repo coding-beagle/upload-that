@@ -210,6 +210,22 @@ function createPopup(message, bgColor) {
   }, 100);
 }
 
+document.getElementById("new-session-button").addEventListener("click", () => {
+  const randomBase64 = generateRandomBase64(16);
+  window.location.href = `https://upload-that.onrender.com/share.html?id=${randomBase64}`;
+});
+
+function generateRandomBase64(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  let result = '';
+
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+  return result;
+}
+
 function isMobile() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
@@ -225,3 +241,4 @@ if(isMobile()) {
     $("#qrCodeModal").modal("hide");
   });
 }
+
