@@ -145,6 +145,19 @@ async function uploadFile(file) {
 }
 
 function displayFile(fileDisplayName, fileSize, fileType, fileId) {
+  const existingFiles = document.querySelectorAll('.file-item');
+
+  // Loop through them and check if any has the same name and size
+  for (let i = 0; i < existingFiles.length; i++) {
+    const existingFileName = existingFiles[i].querySelector('.file-name').textContent;
+    const existingFileSize = Number(existingFiles[i].getAttribute('data-file-size'));
+  
+    if (existingFileName === fileDisplayName && existingFileSize === fileSize) {
+      console.log(`File ${fileDisplayName} with size ${fileSize} already exists in the list.`);
+      return;
+    }
+  }
+
   const existingFile = document.querySelector(`.file-item[data-file-id="${fileId}"]`);
   if (existingFile) {
     console.log(`File with ID ${fileId} already exists in the list.`);
@@ -154,8 +167,10 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   const fileElement = document.createElement('div');
   fileElement.className = 'file-item';
   fileElement.setAttribute('data-file-id', fileId); // Add this line
+  fileElement.setAttribute('data-file-size', fileSize); // Set file size
 
   const fileNameElement = document.createElement('p'); // Rename this variable
+  fileNameElement.className = 'file-name'; // Add class name
   fileNameElement.textContent = fileDisplayName; // Update the reference here
   fileElement.appendChild(fileNameElement);
 
