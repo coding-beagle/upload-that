@@ -17,16 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 // Configure Multer for file uploads
 const upload = multer({ storage: multer.memoryStorage() });
 
-initializeDatabase()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error("Failed to start server:", error);
-  });
-
 const initializeDatabase = async () => {
   try {
     const tableExistsQuery = `
@@ -59,6 +49,16 @@ const initializeDatabase = async () => {
     console.error("Error initializing database:", error);
   }
 };
+
+initializeDatabase()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Failed to start server:", error);
+  });
 
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
