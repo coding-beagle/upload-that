@@ -25,20 +25,6 @@ body {
     justify-content: center;
   }
 
-  @media (max-width: 767px) {
-    #generate-qr {
-      display: none;
-    }
-    
-    #qr-code {
-      display: none;
-    }
-    
-    #scan-qr {
-      display: inline-block;
-    }
-  }
-
   #scanner-container {
     position: relative;
     display: flex;
