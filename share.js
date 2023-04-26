@@ -88,7 +88,7 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
     console.log(`File with ID ${fileId} already exists in the list.`);
     return;
   }
-  
+
   const fileElement = document.createElement('div');
   fileElement.className = 'file-item';
   fileElement.setAttribute('data-file-id', fileId); // Add this line
@@ -98,11 +98,13 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   fileElement.appendChild(fileNameElement);
 
   // Create a download link for all file types
-  const downloadLink = document.createElement('a');
-  downloadLink.textContent = 'Download';
-  downloadLink.href = `${API_BASE_URL}/download/${fileId}`;
-  downloadLink.download = fileDisplayName;
-  fileElement.appendChild(downloadLink);
+  const downloadButton = document.createElement('button');
+  downloadButton.className = 'btn btn-primary btn-sm ml-2';
+  downloadButton.innerHTML = '<i class="fas fa-download"></i>';
+  downloadButton.addEventListener('click', () => {
+    window.location.href = `${API_BASE_URL}/download/${fileId}`;
+  });
+  fileElement.appendChild(downloadButton);
 
   if (fileType.startsWith('image/')) {
     createImagePreview(fileId, fileElement);
@@ -119,16 +121,14 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   removeButton.innerHTML = '<i class="fas fa-times"></i>';
   removeButton.addEventListener('click', async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/files/${fileId}`, {
-        method: 'DELETE',
-      });
-      const result = await response.json();
-      console.log(result);
+      await deleteFile(fileId);
+      socket.emit("fileDeleted", randomBase64, fileId);
       fileElement.remove();
     } catch (error) {
-      console.error(error);
+      console.error('Error deleting file:', error);
     }
   });
+  
   fileElement.appendChild(removeButton);
 
   document.querySelector('.file-list').appendChild(fileElement);
@@ -143,3 +143,19 @@ async function createImagePreview(fileId, fileElement) {
 
   fileElement.appendChild(image);
 }
+
+async function deleteFile(fileId) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/delete/${fileId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete file');
+    }
+  } catch (error) {
+    console.error('Error deleting file:', error);
+    throw error;
+  }
+}
+

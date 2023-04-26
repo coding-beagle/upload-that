@@ -66,6 +66,11 @@ io.on('connection', (socket) => {
       }
     }
   });
+
+  socket.on('fileDeleted', (roomId, fileId) => {
+    console.log('File deleted in room:', roomId, fileId);
+    socket.to(roomId).emit('fetchFiles');
+  });
 });
 
 // Configure Multer for file uploads
@@ -144,7 +149,7 @@ app.get('/files/:qr_code_id', async (req, res) => {
     }
   });
 
-  app.delete('/files/:file_id', async (req, res) => {
+  app.delete('/delete/:file_id', async (req, res) => {
     try {
       const { file_id } = req.params;
   
@@ -154,9 +159,10 @@ app.get('/files/:qr_code_id', async (req, res) => {
       `;
       await pool.query(query, [file_id]);
   
-      res.status(200).send({ message: 'File deleted successfully' });
+      res.status(204).send();
     } catch (error) {
       console.error(error);
       res.status(500).send({ error: 'An error occurred while deleting the file' });
     }
   });
+  
