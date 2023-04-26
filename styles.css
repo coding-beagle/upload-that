@@ -72,6 +72,20 @@ body {
     margin-top: 0;
   }
   
+  .loader-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   .loader {
     display: inline-block;
     width: 50px;

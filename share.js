@@ -36,13 +36,11 @@ socket.on('fileDeletion', async (fileId) => {
 });
 
 socket.on('showLoadingElement', () =>{
-  const loader = document.querySelector('.loader');
-  loader.style.display = 'inline-block';
+  document.getElementById('loader-container').style.display = 'flex';
 })
 
 socket.on('hideLoadingElement', () => {
-  const loader = document.querySelector('.loader');
-  loader.style.display = 'none';
+  document.getElementById('loader-container').style.display = 'none';
 });
 
 // Generate the QR code and display it in the qr-code div
@@ -260,3 +258,4 @@ if(!(isMobile())) {
   });
 }
 
+document.getElementById('loader-container').style.display = 'none';
