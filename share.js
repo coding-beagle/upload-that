@@ -1,4 +1,3 @@
-import { io } from "socket.io-client";
 const API_BASE_URL = 'https://uploadthat-service.onrender.com';
 const urlParams = new URLSearchParams(window.location.search);
 const randomBase64 = urlParams.get('id');
