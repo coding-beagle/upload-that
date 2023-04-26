@@ -35,6 +35,16 @@ socket.on('fileDeletion', async (fileId) => {
   }
 });
 
+socket.on('showLoadingElement', () =>{
+  const loader = document.querySelector('.loader');
+  loader.style.display = 'inline-block';
+})
+
+socket.on('hideLoadingElement', () => {
+  const loader = document.querySelector('.loader');
+  loader.style.display = 'none';
+});
+
 // Generate the QR code and display it in the qr-code div
 const qrCodeElement = document.getElementById("qr-code");
 const qrCodeModalElement = document.getElementById("qr-code-modal");
@@ -78,6 +88,7 @@ document.getElementById('file-input').addEventListener('change', async (event) =
 
   if (fileList.length > 0) {
     const file = fileList[0];
+    socket.emit("fileUploading");
     const fileId = await uploadFile(file);
     displayFile(file.name, file.size, file.type, fileId);
     
@@ -124,6 +135,10 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   fileNameElement.textContent = fileDisplayName; // Update the reference here
   fileElement.appendChild(fileNameElement);
 
+  const fileContentElement = document.createElement('div');
+  fileContentElement.className = 'file-content';
+  fileContentElement.appendChild(fileNameElement);
+
   if (fileType.startsWith('image/')) {
     createImagePreview(fileId, fileElement);
   } else {
@@ -141,7 +156,6 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   downloadButton.addEventListener('click', () => {
     window.location.href = `${API_BASE_URL}/download/${fileId}`;
   });
-  fileElement.appendChild(downloadButton);
 
   const removeButton = document.createElement('button');
   removeButton.className = 'btn btn-danger btn-sm ml-2';
@@ -155,8 +169,15 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
       console.error('Error deleting file:', error);
     }
   });
+
+  const buttonsElement = document.createElement('div');
+  buttonsElement.className = 'buttons';
+  buttonsElement.appendChild(downloadButton);
+  buttonsElement.appendChild(removeButton);
+
+  fileElement.appendChild(fileContentElement);
+  fileElement.appendChild(buttonsElement);
   
-  fileElement.appendChild(removeButton);
 
   document.querySelector('.file-list').appendChild(fileElement);
 }

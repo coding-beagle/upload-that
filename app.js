@@ -43,6 +43,13 @@ io.on('connection', (socket) => {
   socket.on('fileUploaded', () => {
     if (roomId) {
       socket.to(roomId).emit('fetchFiles');
+      socket.to(roomId).emit('hideLoadingElement');
+    }
+  });
+
+  socket.on('fileUploading', () => {
+    if (roomId) {
+      socket.to(roomId).emit('showLoadingElement');
     }
   });
 
