@@ -2,7 +2,7 @@ const API_BASE_URL = 'https://uploadthat-service.onrender.com';
 const urlParams = new URLSearchParams(window.location.search);
 const randomBase64 = urlParams.get('id');
 const socket = io(API_BASE_URL);
-
+const link = `${window.location.origin}/join?id=${randomBase64}`;
 
 socket.on("connect", () => {
   console.log("Connected to server:", socket.id);
@@ -36,6 +36,12 @@ document.getElementById("copy-link-btn").addEventListener("click", () => {
 $(window).on("load", () => {
   $("#qrCodeModal").modal("show");
 });
+
+function createQRCode() {
+  const link = `${window.location.origin}/join?id=${randomBase64}`;
+  const qrCodeElement = document.getElementById("qr-code");
+  new QRCode(qrCodeElement, link);
+}
 
 async function fetchFiles(qrCodeId) {
   try {
@@ -169,3 +175,8 @@ async function deleteFile(fileId) {
   }
 }
 
+createQRCode();
+
+$(document).ready(function () {
+  $("#qrCodeModal").modal("show");
+});
