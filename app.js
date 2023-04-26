@@ -8,8 +8,9 @@ const http = require('http').Server(app);
 
 const io = require('socket.io')(http, {
   cors: {
-    origin: "https://uploadthat-service.onrender.com", // Replace "*" with your client-side URL to restrict origins
-    methods: ["GET", "POST"]
+    origin: ["https://upload-that.onrender.com", "https://uploadthat-service.onrender.com"],
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
