@@ -12,17 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   document.getElementById('generate-qr').addEventListener('click', () => {
     const randomBase64 = generateRandomBase64(16);
-    const qrElement = document.getElementById('qr-code');
-    qrElement.innerHTML = '';
-  
-    const qrCode = new QRCode(qrElement, {
-      text: randomBase64,
-      width: 256,
-      height: 256,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.H,
-    });
+    window.location.href = `https://upload-that.onrender.com/share/${randomBase64}`;
   });
   
   function generateRandomBase64(length) {

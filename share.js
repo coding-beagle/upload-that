@@ -1,4 +1,16 @@
 const API_BASE_URL = 'http://upload-that.onrender.com';
+const randomBase64 = window.location.pathname.split('/').pop();
+
+// Generate the QR code and display it in the qr-code div
+const qrElement = document.getElementById('qr-code');
+const qrCode = new QRCode(qrElement, {
+  text: randomBase64,
+  width: 256,
+  height: 256,
+  colorDark: "#000000",
+  colorLight: "#ffffff",
+  correctLevel: QRCode.CorrectLevel.H,
+});
 
 document.getElementById('file-input').addEventListener('change', async (event) => {
   const fileList = event.target.files;
