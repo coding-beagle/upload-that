@@ -88,9 +88,7 @@ body {
   .file-item .buttons {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    width: 20px;
-    gap: 4px; /* Adjust this value to change the spacing between the buttons */
+    gap: 5px;
   }
   
   .file-item button {
