@@ -7,7 +7,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const pool = new Pool({
-  connectionString: proccess.env.STRING,
+  connectionString: process.env.STRING,
 });
 
 app.use(cors());
