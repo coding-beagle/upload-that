@@ -11,7 +11,13 @@ socket.on("connect", () => {
 socket.on("fetchFiles", async () => {
   console.log("New file uploaded, fetching files...");
   const files = await fetchFiles(randomBase64);
-  displayFile(file, fileId);
+  files.forEach((file) => {
+    // Check if the file is already displayed
+    const existingFileElement = document.querySelector(`.file-item[data-file-id="${file.id}"]`);
+    if (!existingFileElement) {
+      displayFile(file, file.id);
+    }
+  });
 });
 
 // Generate the QR code and display it in the qr-code div
@@ -79,6 +85,7 @@ async function uploadFile(file) {
 function displayFile(file, fileId) {
   const fileElement = document.createElement('div');
   fileElement.className = 'file-item';
+  fileElement.setAttribute('data-file-id', fileId); // Add this line
 
   const fileName = document.createElement('p');
   fileName.textContent = file.name;
