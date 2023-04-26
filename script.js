@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
   function generateRandomBase64(length) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
     let result = '';
   
     for (let i = 0; i < length; i++) {
