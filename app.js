@@ -7,7 +7,7 @@ const app = express();
 const port = 3000;
 
 const pool = new Pool({
-  connectionString: 'your_connection_string_here'
+  connectionString: process.env.DB_HOST,
 });
 
 app.use(cors());
