@@ -5,7 +5,7 @@ const randomBase64 = urlParams.get('id');
 // Generate the QR code and display it in the qr-code div
 const qrElement = document.getElementById('qr-code');
 const qrCode = new QRCode(qrElement, {
-  text: randomBase64,
+  text: `https://upload-that.onrender.com/share.html?id=${randomBase64}`,
   width: 256,
   height: 256,
   colorDark: "#000000",
