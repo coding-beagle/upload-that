@@ -28,17 +28,26 @@ socket.on('userLeft', () => {
 });
 
 socket.on('fileDeleted', async () => {
+  const files = await fetchFiles(randomBase64);
+
   // logic to find files that should be deleted
   const displayedFiles = new Set(); // Create a Set to store the IDs of displayed files
-  document.querySelectorAll('.file').forEach(file => {
+  document.querySelectorAll('.file-list .file').forEach(file => {
     displayedFiles.add(file.dataset.fileId);
   });
 
-  const files = await fetchFiles(randomBase64);
   files.forEach(file => {
     if (!displayedFiles.has(file.id)) {
     // If the file's ID is not in the Set, display the file
     displayFile(file.file_name, file.file_size, file.file_type, file.id);
+  }
+  });
+
+  // Loop through the remaining displayed file IDs in the Set and remove them
+displayedFiles.forEach(fileId => {
+  const fileElement = document.querySelector(`.file[data-file-id="${fileId}"]`);
+  if (fileElement) {
+    fileElement.remove();
   }
   });
 });
@@ -224,8 +233,8 @@ function isMobile() {
 
 createQRCode();
 
-if(!isMobile) {
+if(isMobile()) {
   $(document).ready(function () {
-    $("#qrCodeModal").modal("show");
+    $("#qrCodeModal").modal("hide");
   });
 }
