@@ -28,6 +28,8 @@ async function uploadFile(file) {
   formData.append('file', file);
   formData.append('qr_code_id', `${randomBase64}`);
 
+  console.log(formData);
+
   const response = await fetch(`${API_BASE_URL}/upload`, {
     method: 'POST',
     body: formData,
