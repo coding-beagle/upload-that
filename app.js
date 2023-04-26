@@ -32,46 +32,57 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 io.on('connection', (socket) => {
+  console.log('User connected:', socket.id);
   let roomId; // Define roomId in the outer scope
 
-  socket.on('joinRoom', (roomId) => {
+  socket.on('joinRoom', (room) => {
     roomId = room; // Update roomId when a user joins a room
+    console.log('User joined room:', roomId);
     socket.join(roomId);
     socket.to(roomId).emit('userJoined');
   });
 
-  socket.on('fileUploaded', (roomId) => {
-    socket.to(roomId).emit('fetchFiles');
+  socket.on('fileUploaded', () => {
+    if (roomId) {
+      console.log('File uploaded in room:', roomId);
+      socket.to(roomId).emit('fetchFiles');
+    }
   });
 
   socket.on('disconnect', () => {
     if (roomId) {
-      socket.emit('leaveRoom', roomId);
+      socket.emit('leaveRoom');
     }
   });
 
-  socket.on('leaveRoom', async (roomId) => {
-    socket.leave(roomId);
-    socket.to(roomId).emit('userLeft');
+  socket.on('leaveRoom', async () => {
+    if (roomId) {
+      socket.leave(roomId);
+      socket.to(roomId).emit('userLeft');
 
-    const clients = await io.in(roomId).fetchSockets();
-    if (clients.length === 0) {
-      try {
-        const query = `
-          DELETE FROM files
-          WHERE qr_code_id = $1
-        `;
-        await pool.query(query, [roomId]);
-      } catch (error) {
-        console.error(error);
+      const clients = await io.in(roomId).fetchSockets();
+      if (clients.length === 0) {
+        try {
+          const query = `
+            DELETE FROM files
+            WHERE qr_code_id = $1
+          `;
+          await pool.query(query, [roomId]);
+        } catch (error) {
+          console.error(error);
+        }
       }
+      roomId = null; // Clear roomId when a user leaves a room
     }
   });
 
-  socket.on('fileDeleted', (roomId, fileId) => {
-  socket.to(roomId).emit('fileDeletion', fileId);
+  socket.on('fileDeleted', (fileId) => {
+    if (roomId) {
+      socket.to(roomId).emit('fileDeletion', fileId);
+    }
   });
 });
+
 
 // Configure Multer for file uploads
 const upload = multer({ storage: multer.memoryStorage() });
