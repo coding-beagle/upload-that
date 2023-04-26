@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   document.getElementById('generate-qr').addEventListener('click', () => {
     const randomBase64 = generateRandomBase64(16);
-    window.location.href = `https://upload-that.onrender.com/share/${randomBase64}`;
+    window.location.href = `https://upload-that.onrender.com/share.html?id=${randomBase64}`;
   });
   
   function generateRandomBase64(length) {
