@@ -56,6 +56,10 @@ document.getElementById('file-input').addEventListener('change', async (event) =
   }
 });
 
+window.addEventListener('beforeunload', () => {
+  socket.emit('leaveRoom', randomBase64);
+});
+
 async function uploadFile(file) {
   const formData = new FormData();
   formData.append('file', file);
@@ -79,6 +83,12 @@ async function uploadFile(file) {
 }
 
 function displayFile(fileDisplayName, fileSize, fileType, fileId) {
+  const existingFile = document.querySelector(`.file-item[data-file-id="${fileId}"]`);
+  if (existingFile) {
+    console.log(`File with ID ${fileId} already exists in the list.`);
+    return;
+  }
+  
   const fileElement = document.createElement('div');
   fileElement.className = 'file-item';
   fileElement.setAttribute('data-file-id', fileId); // Add this line
@@ -86,6 +96,13 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   const fileNameElement = document.createElement('p'); // Rename this variable
   fileNameElement.textContent = fileDisplayName; // Update the reference here
   fileElement.appendChild(fileNameElement);
+
+  // Create a download link for all file types
+  const downloadLink = document.createElement('a');
+  downloadLink.textContent = 'Download';
+  downloadLink.href = `${API_BASE_URL}/download/${fileId}`;
+  downloadLink.download = fileDisplayName;
+  fileElement.appendChild(downloadLink);
 
   if (fileType.startsWith('image/')) {
     createImagePreview(fileId, fileElement);
@@ -100,8 +117,17 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   const removeButton = document.createElement('button');
   removeButton.className = 'btn btn-danger btn-sm ml-2';
   removeButton.innerHTML = '<i class="fas fa-times"></i>';
-  removeButton.addEventListener('click', () => {
-    fileElement.remove();
+  removeButton.addEventListener('click', async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/files/${fileId}`, {
+        method: 'DELETE',
+      });
+      const result = await response.json();
+      console.log(result);
+      fileElement.remove();
+    } catch (error) {
+      console.error(error);
+    }
   });
   fileElement.appendChild(removeButton);
 
@@ -114,7 +140,6 @@ async function createImagePreview(fileId, fileElement) {
   const image = new Image();
   image.src = imageUrl;
   image.width = 200;
-  image.height = 200;
 
   fileElement.appendChild(image);
 }

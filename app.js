@@ -47,6 +47,25 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
   });
+
+  socket.on('leaveRoom', async (roomId) => {
+    console.log('User left room:', roomId);
+    socket.leave(roomId);
+
+    const clients = await io.in(roomId).fetchSockets();
+    if (clients.length === 0) {
+      try {
+        const query = `
+          DELETE FROM files
+          WHERE qr_code_id = $1
+        `;
+        await pool.query(query, [roomId]);
+        console.log(`Deleted all files with QR code ID: ${roomId}`);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  });
 });
 
 // Configure Multer for file uploads
@@ -124,4 +143,20 @@ app.get('/files/:qr_code_id', async (req, res) => {
       res.status(500).send({ error: 'An error occurred while downloading the file' });
     }
   });
+
+  app.delete('/files/:file_id', async (req, res) => {
+    try {
+      const { file_id } = req.params;
   
+      const query = `
+        DELETE FROM files
+        WHERE id = $1
+      `;
+      await pool.query(query, [file_id]);
+  
+      res.status(200).send({ message: 'File deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: 'An error occurred while deleting the file' });
+    }
+  });
