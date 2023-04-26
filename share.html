@@ -37,7 +37,7 @@
   <script src="share.js" type="module"></script>
 
   <div class="modal fade" tabindex="-1" role="dialog" id="qrCodeModal">
-        <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="qrCodeModalLabel">Scan this QR code!</h5>
@@ -45,8 +45,10 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body d-flex justify-content-center align-items-center">
+        <div class="modal-body">
+          <div class="d-flex justify-content-center align-items-center">
             <div id="qr-code-modal" class="text-center"></div>
+          </div>
           <div class="input-group mt-3">
             <input type="text" class="form-control" id="qr-code-link" readonly>
             <div class="input-group-append">
@@ -56,7 +58,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>  
   
 </body>
 </html>

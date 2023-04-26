@@ -17,16 +17,19 @@ socket.on("fetchFiles", async () => {
   });
 });
 
-socket.on('joinRoom', () => {
+socket.on('connection', () => {
   createPopup('A device has joined the session', 'lightgreen');
+
+  console.log("Connection Triggered");
 
   $(document).ready(function () {
     $("#qrCodeModal").modal("hide");
   });
 });
 
-socket.on('leaveRoom', () => {
+socket.on('disconnect', () => {
   createPopup('A device has left the session', 'lightcoral');
+  console.log("Disconnect Triggered");
 });
 
 
@@ -208,9 +211,14 @@ function createPopup(message, bgColor) {
   }, 100);
 }
 
+function isMobile() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
 
 createQRCode();
 
-$(document).ready(function () {
-  $("#qrCodeModal").modal("show");
-});
+if(!isMobile) {
+  $(document).ready(function () {
+    $("#qrCodeModal").modal("show");
+  });
+}
