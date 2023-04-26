@@ -7,8 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
   function isMobile() {
-    // return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    return true;
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
   
   document.getElementById('generate-qr').addEventListener('click', () => {
@@ -44,9 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
     const videoElement = document.getElementById('qr-reader');
     qrScanner = new QrScanner(videoElement, (decodedText) => {
-      alert('Scanned QR code: ' + decodedText);
-      qrScanner.stop();
-      $('#scan-modal').modal('hide');
+      const targetUrl = `https://upload-that.onrender.com/share.html?id=${decodedText}`;
+      window.location.href = targetUrl;
     });
   
     qrScanner.start();
