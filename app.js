@@ -62,15 +62,15 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     console.log('Request File:', req.file);
 
     const { qr_code_id } = req.body;
-    const { originalname: file_name, size: file_size, buffer: file_content } = req.file;
+    const { originalname: file_name, mimetype: file_type, size: file_size, buffer: file_content } = req.file;
 
     const query = `
-      INSERT INTO files (qr_code_id, file_name, file_size, file_content)
+      INSERT INTO files (qr_code_id, file_name, file_size, file_content, file_type)
       VALUES ($1, $2, $3, $4)
       RETURNING id
     `;
 
-    const result = await pool.query(query, [qr_code_id, file_name, file_size, file_content]);
+    const result = await pool.query(query, [qr_code_id, file_name, file_size, file_content, file_type]);
     console.log('Result Rows:', result.rows);
 
     const file_id = result.rows[0].id;
