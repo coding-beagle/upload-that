@@ -49,7 +49,7 @@ document.getElementById('file-input').addEventListener('change', async (event) =
   if (fileList.length > 0) {
     const file = fileList[0];
     const fileId = await uploadFile(file);
-    displayFile(file, fileId);
+    displayFile(file.name, file.size, file.type, fileId);
     
     // Notify the server that a new file was uploaded
     socket.emit("fileUploaded", randomBase64);
@@ -107,6 +107,7 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
 
   document.querySelector('.file-list').appendChild(fileElement);
 }
+
 
 function createImagePreview(file, fileElement) {
   const img = document.createElement('img');
