@@ -83,9 +83,9 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   fileElement.className = 'file-item';
   fileElement.setAttribute('data-file-id', fileId); // Add this line
 
-  const fileName = document.createElement('p');
-  fileName.textContent = fileDisplayName;
-  fileElement.appendChild(fileName);
+  const fileNameElement = document.createElement('p'); // Rename this variable
+  fileNameElement.textContent = fileDisplayName; // Update the reference here
+  fileElement.appendChild(fileNameElement);
 
   if (fileType.startsWith('image/')) {
     createImagePreview(file, fileElement);
@@ -93,7 +93,7 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
     const downloadLink = document.createElement('a');
     downloadLink.textContent = 'Download';
     downloadLink.href = `${API_BASE_URL}/download/${fileId}`;
-    downloadLink.download = file.name;
+    downloadLink.download = fileDisplayName; // Update the reference here
     fileElement.appendChild(downloadLink);
   }
 
