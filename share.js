@@ -15,8 +15,7 @@ socket.on("fetchFiles", async () => {
     // Check if the file is already displayed
     const existingFileElement = document.querySelector(`.file-item[data-file-id="${file.id}"]`);
     if (!existingFileElement) {
-      displayFile(file, file.id, file.file_type); // Pass file.file_type as the third argument
-    }
+      displayFile(file.id, file.file_name, file.file_size, file.file_type);    }
   });
 });
 
@@ -82,7 +81,7 @@ async function uploadFile(file) {
   return result.file_id;
 }
 
-function displayFile(file, fileId) {
+function displayFile(fileId, fileName, fileSize, fileType) {
   const fileElement = document.createElement('div');
   fileElement.className = 'file-item';
   fileElement.setAttribute('data-file-id', fileId); // Add this line
