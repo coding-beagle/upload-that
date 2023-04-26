@@ -30,10 +30,12 @@ app.post('/upload', upload.single('file'), async (req, res) => {
         INSERT INTO files (qr_code_id, file_name, file_size, file_content)
         VALUES ($1, $2, $3, $4)
       `;
-      await pool.query(query, [qr_code_id, file_name, file_size, file_content]);
+      
+      const result = await pool.query(query, [qr_code_id, file_name, file_size, file_content]);
+      const file_id = result.rows[0].id; // Assuming that you're returning the inserted row's ID from the query
   
-      res.status(201).send({ message: 'File uploaded successfully' });
-    } catch (error) {
+      res.status(201).send({ message: 'File uploaded successfully', file_id });
+      } catch (error) {
       console.error(error);
       res.status(500).send({ error: 'An error occurred while uploading the file' });
     }
