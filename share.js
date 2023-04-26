@@ -171,6 +171,16 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
 
   const fileNameElement = document.createElement('p'); // Rename this variable
   fileNameElement.className = 'file-name'; // Add class name
+
+  // Cut off the file name if it's too long, but ensure the file extension is still visible
+  let maxFileNameLength = 20; // Adjust this to your needs
+  let fileName = fileDisplayName;
+  let fileExtension = fileName.split('.').pop();
+
+  if (fileName.length > maxFileNameLength + fileExtension.length + 1) { // +1 for the dot
+    fileName = fileName.substring(0, maxFileNameLength) + '...' + fileExtension;
+  }
+
   fileNameElement.textContent = fileDisplayName; // Update the reference here
   fileElement.appendChild(fileNameElement);
 
