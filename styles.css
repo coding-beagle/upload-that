@@ -88,13 +88,13 @@ body {
   .file-item .buttons {
     display: flex;
     justify-content: space-between;
-    width: 8px;
+    width: 30;
     gap: 4px; /* Adjust this value to change the spacing between the buttons */
   }
   
   .file-item button {
     flex: 1;
-    max-width: 20px; /* adjust this value to change the maximum width of buttons */
+    width: 30px; /* adjust this value to change the maximum width of buttons */
   }
   
   .loader-container {
