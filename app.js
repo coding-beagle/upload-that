@@ -83,23 +83,23 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   }
 });
 
-  app.get('/files/:qr_code_id', async (req, res) => {
-    try {
-      const { qr_code_id } = req.params;
-  
-      const query = `
-        SELECT id, file_name, file_size
-        FROM files
-        WHERE qr_code_id = $1
-      `;
-      const { rows } = await pool.query(query, [qr_code_id]);
-  
-      res.send(rows);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send({ error: 'An error occurred while fetching the files' });
-    }
-  });
+app.get('/files/:qr_code_id', async (req, res) => {
+  try {
+    const { qr_code_id } = req.params;
+
+    const query = `
+      SELECT id, file_name, file_size, file_type
+      FROM files
+      WHERE qr_code_id = $1
+    `;
+    const { rows } = await pool.query(query, [qr_code_id]);
+
+    res.send(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'An error occurred while fetching the files' });
+  }
+});
 
   app.get('/download/:file_id', async (req, res) => {
     try {

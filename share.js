@@ -15,7 +15,7 @@ socket.on("fetchFiles", async () => {
     // Check if the file is already displayed
     const existingFileElement = document.querySelector(`.file-item[data-file-id="${file.id}"]`);
     if (!existingFileElement) {
-      displayFile(file, file.id);
+      displayFile(file, file.id, file.file_type); // Pass file.file_type as the third argument
     }
   });
 });
@@ -91,7 +91,7 @@ function displayFile(file, fileId) {
   fileName.textContent = file.name;
   fileElement.appendChild(fileName);
 
-  if (file.type.startsWith('image/')) {
+  if ((file.type || fileType).startsWith('image/')) {
     createImagePreview(file, fileElement);
   } else {
     const downloadLink = document.createElement('a');
