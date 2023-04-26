@@ -84,6 +84,7 @@ async function fetchFiles(qrCodeId) {
 document.getElementById('file-input').addEventListener('change', async (event) => {
   const fileList = event.target.files;
   const maxFileSize = 25 * 1024 * 1024; // 25 MB in bytes
+  const file = fileList[0];
 
   if (fileList.length > 0) {
     if (file.size > maxFileSize) {
@@ -110,7 +111,7 @@ document.getElementById('file-input').addEventListener('change', async (event) =
 
       return;
     }
-    const file = fileList[0];
+
     socket.emit("fileUploading");
     const fileId = await uploadFile(file);
     displayFile(file.name, file.size, file.type, fileId);
