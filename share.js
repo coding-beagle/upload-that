@@ -27,9 +27,9 @@ socket.on('userLeft', () => {
   createPopup('A device has left the session', 'lightcoral');
 });
 
-socket.on('fileDeleted', async (fileId) => {
+socket.on('fileDeletion', async (fileId) => {
   // Remove the deleted file from the displayed files
-  const fileElement = document.querySelector(`.file[data-file-id="${fileId}"]`);
+  const fileElement = document.querySelector(`.file-item[data-file-id="${fileId}"]`);
   if (fileElement) {
     fileElement.remove();
   }

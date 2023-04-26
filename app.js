@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('fileDeleted', (roomId, fileId) => {
-  socket.to(roomId).emit('fileDeleted');
+  socket.to(roomId).emit('fileDeletion', fileId);
   });
 });
 
