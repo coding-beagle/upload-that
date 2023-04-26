@@ -3,7 +3,6 @@ const multer = require('multer');
 const { Pool } = require('pg');
 const cors = require('cors');
 
-const http = require('http').Server(app);
 const io = require('socket.io')(http, {
   cors: {
     origin: "https://upload-that.onrender.com", // Replace "*" with your client-side URL to restrict origins
@@ -46,6 +45,8 @@ const upload = multer({ storage: multer.memoryStorage() });
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+const http = require('http').Server(app);
 
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
