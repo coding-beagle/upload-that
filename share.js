@@ -11,11 +11,8 @@ socket.on("connect", () => {
 socket.on("fetchFiles", async () => {
   console.log("New file uploaded, fetching files...");
   const files = await fetchFiles(randomBase64);
-  files.forEach((file) => {
-    // Check if the file is already displayed
-    const existingFileElement = document.querySelector(`.file-item[data-file-id="${file.id}"]`);
-    if (!existingFileElement) {
-      displayFile(file.id, file.file_name, file.file_size, file.file_type);    }
+  files.forEach(file => {
+    displayFile(file.file_name, file.file_size, file.file_type, file.id);
   });
 });
 
@@ -81,7 +78,7 @@ async function uploadFile(file) {
   return result.file_id;
 }
 
-function displayFile(fileId, fileDisplayName, fileSize, fileType) {
+function displayFile(fileName, fileSize, fileType, fileId) {
   const fileElement = document.createElement('div');
   fileElement.className = 'file-item';
   fileElement.setAttribute('data-file-id', fileId); // Add this line
