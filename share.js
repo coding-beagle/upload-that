@@ -3,6 +3,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const randomBase64 = urlParams.get('id');
 const socket = io(API_BASE_URL);
 
+
 socket.on("connect", () => {
   console.log("Connected to server:", socket.id);
   socket.emit("joinRoom", randomBase64);
@@ -17,14 +18,23 @@ socket.on("fetchFiles", async () => {
 });
 
 // Generate the QR code and display it in the qr-code div
-const qrElement = document.getElementById('qr-code');
-const qrCode = new QRCode(qrElement, {
-  text: `https://upload-that.onrender.com/share.html?id=${randomBase64}`,
-  width: 256,
-  height: 256,
-  colorDark: "#000000",
-  colorLight: "#ffffff",
-  correctLevel: QRCode.CorrectLevel.H,
+const qrCodeElement = document.getElementById("qr-code");
+const qrCodeModalElement = document.getElementById("qr-code-modal");
+const qrCodeLink = document.getElementById("qr-code-link");
+
+qrCodeElement.style.display = "none";
+new QRCode(qrCodeModalElement, link);
+qrCodeLink.value = link;
+
+document.getElementById("copy-link-btn").addEventListener("click", () => {
+  const qrCodeLink = document.getElementById("qr-code-link");
+  qrCodeLink.select();
+  document.execCommand("copy");
+  alert("Link copied to clipboard!");
+});
+
+$(window).on("load", () => {
+  $("#qrCodeModal").modal("show");
 });
 
 async function fetchFiles(qrCodeId) {
