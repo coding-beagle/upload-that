@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://upload-that.onrender.com';
+const API_BASE_URL = 'https://upload-that.onrender.com';
 const urlParams = new URLSearchParams(window.location.search);
 const randomBase64 = urlParams.get('id');
 
