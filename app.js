@@ -32,19 +32,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
   let roomId; // Define roomId in the outer scope
 
   socket.on('joinRoom', (room) => {
     roomId = room; // Update roomId when a user joins a room
-    console.log('User joined room:', roomId);
     socket.join(roomId);
     socket.to(roomId).emit('userJoined');
   });
 
   socket.on('fileUploaded', () => {
     if (roomId) {
-      console.log('File uploaded in room:', roomId);
       socket.to(roomId).emit('fetchFiles');
     }
   });
@@ -77,9 +74,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('fileDeleted', (fileId) => {
-    if (roomId) {
-      socket.to(roomId).emit('fileDeletion', fileId);
-    }
+  socket.to(roomId).emit('fileDeletion', fileId);
   });
 });
 
