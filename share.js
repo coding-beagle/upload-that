@@ -83,8 +83,33 @@ async function fetchFiles(qrCodeId) {
 
 document.getElementById('file-input').addEventListener('change', async (event) => {
   const fileList = event.target.files;
+  const maxFileSize = 25 * 1024 * 1024; // 25 MB in bytes
 
   if (fileList.length > 0) {
+    if (file.size > maxFileSize) {
+      // Create a pop-up that shakes and tells the user the file size is too large
+      const errorMessage = 'File size is too large. Please upload a file smaller than 25 MB.';
+      const errorPopup = document.createElement('div');
+      errorPopup.textContent = errorMessage;
+      errorPopup.style.position = 'fixed';
+      errorPopup.style.top = '50%';
+      errorPopup.style.left = '50%';
+      errorPopup.style.transform = 'translate(-50%, -50%)';
+      errorPopup.style.backgroundColor = 'red';
+      errorPopup.style.padding = '20px';
+      errorPopup.style.borderRadius = '10px';
+      errorPopup.style.animation = 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both';
+      errorPopup.style.animationIterationCount = '3';
+      errorPopup.style.zIndex = '1000';
+      document.body.appendChild(errorPopup);
+
+      // Remove the error popup after 5 seconds
+      setTimeout(() => {
+        errorPopup.remove();
+      }, 5000);
+
+      return;
+    }
     const file = fileList[0];
     socket.emit("fileUploading");
     const fileId = await uploadFile(file);

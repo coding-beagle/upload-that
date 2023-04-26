@@ -88,13 +88,13 @@ body {
   .file-item .buttons {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: 30%;
     gap: 4px; /* Adjust this value to change the spacing between the buttons */
   }
   
   .file-item button {
     flex: 1;
-    max-width: 2%; /* adjust this value to change the maximum width of buttons */
+    max-width: 10px; /* adjust this value to change the maximum width of buttons */
   }
   
   .loader-container {
@@ -129,3 +129,22 @@ body {
       transform: rotate(360deg);
     }
   }
+
+  @keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
+  
