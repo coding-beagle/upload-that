@@ -17,9 +17,9 @@ app.use(express.urlencoded({ extended: true }));
 // Configure Multer for file uploads
 const upload = multer({ storage: multer.memoryStorage() });
 
-  app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-  });
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
@@ -40,7 +40,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 
     const file_id = result.rows[0].id;
 
-    res.status(201).send({ message: 'File uploaded successfully', file_id });
+    console.log('Response data:', { message: 'File uploaded successfully', file_id });
+    res.status(201).json({ message: 'File uploaded successfully', file_id });    
   } catch (error) {
     console.error(error);
     res.status(500).send({ error: 'An error occurred while uploading the file' });
