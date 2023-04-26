@@ -17,12 +17,54 @@ app.use(express.urlencoded({ extended: true }));
 // Configure Multer for file uploads
 const upload = multer({ storage: multer.memoryStorage() });
 
-app.listen(port, () => {
-  console.log(`File sharing app listening at http://localhost:${port}`);
-});
+initializeDatabase()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Failed to start server:", error);
+  });
+
+const initializeDatabase = async () => {
+  try {
+    const tableExistsQuery = `
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_schema = 'public'
+        AND table_name = 'files'
+      );
+    `;
+
+    const result = await pool.query(tableExistsQuery);
+    const tableExists = result.rows[0].exists;
+
+    if (!tableExists) {
+      const createTableQuery = `
+        CREATE TABLE files (
+          id SERIAL PRIMARY KEY,
+          qr_code_id VARCHAR(255) NOT NULL,
+          file_name VARCHAR(255) NOT NULL,
+          file_size BIGINT NOT NULL,
+          file_content BYTEA NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+      `;
+
+      await pool.query(createTableQuery);
+      console.log("Files table created successfully.");
+    }
+  } catch (error) {
+    console.error("Error initializing database:", error);
+  }
+};
 
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
+    console.log('Request Body:', req.body);
+    console.log('Request File:', req.file);
+
     const { qr_code_id } = req.body;
     const { originalname: file_name, size: file_size, buffer: file_content } = req.file;
 
@@ -33,6 +75,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     `;
 
     const result = await pool.query(query, [qr_code_id, file_name, file_size, file_content]);
+    console.log('Result Rows:', result.rows);
+
     const file_id = result.rows[0].id;
 
     res.status(201).send({ message: 'File uploaded successfully', file_id });
