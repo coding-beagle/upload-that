@@ -17,7 +17,6 @@
       </button>
     </div>    
     <h1 class="mt-4">UploadThat</h1>
-    <p>Scan this QR code!</p>
     <div id="qr-code" class="mt-4"></div>
     <div class="file-upload-area mt-4">
       <label for="file-input" class="btn btn-primary">
@@ -41,13 +40,13 @@
         <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="qrCodeModalLabel">QR Code</h5>
+          <h5 class="modal-title" id="qrCodeModalLabel">Scan this QR code!</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-          <div id="qr-code-modal" class="text-center"></div>
+        <div class="modal-body d-flex justify-content-center align-items-center">
+            <div id="qr-code-modal" class="text-center"></div>
           <div class="input-group mt-3">
             <input type="text" class="form-control" id="qr-code-link" readonly>
             <div class="input-group-append">

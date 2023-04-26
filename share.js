@@ -2,7 +2,7 @@ const API_BASE_URL = 'https://uploadthat-service.onrender.com';
 const urlParams = new URLSearchParams(window.location.search);
 const randomBase64 = urlParams.get('id');
 const socket = io(API_BASE_URL);
-const link = `${window.location.origin}/join?id=${randomBase64}`;
+const link = `${window.location.origin}/share.html?id=${randomBase64}`;
 
 socket.on("connect", () => {
   console.log("Connected to server:", socket.id);
@@ -16,6 +16,19 @@ socket.on("fetchFiles", async () => {
     displayFile(file.file_name, file.file_size, file.file_type, file.id);
   });
 });
+
+socket.on('joinRoom', () => {
+  createPopup('A device has joined the session', 'lightgreen');
+
+  $(document).ready(function () {
+    $("#qrCodeModal").modal("hide");
+  });
+});
+
+socket.on('leaveRoom', () => {
+  createPopup('A device has left the session', 'lightcoral');
+});
+
 
 // Generate the QR code and display it in the qr-code div
 const qrCodeElement = document.getElementById("qr-code");
@@ -31,10 +44,6 @@ document.getElementById("copy-link-btn").addEventListener("click", () => {
   qrCodeLink.select();
   document.execCommand("copy");
   alert("Link copied to clipboard!");
-});
-
-$(window).on("load", () => {
-  $("#qrCodeModal").modal("show");
 });
 
 function createQRCode() {
@@ -174,6 +183,31 @@ async function deleteFile(fileId) {
     throw error;
   }
 }
+
+function createPopup(message, bgColor) {
+  const popup = document.createElement('div');
+  popup.className = 'popup';
+  popup.style.position = 'fixed';
+  popup.style.bottom = '20px';
+  popup.style.left = '20px';
+  popup.style.padding = '10px';
+  popup.style.backgroundColor = bgColor;
+  popup.style.color = 'white';
+  popup.style.borderRadius = '5px';
+  popup.style.opacity = '1';
+  popup.style.transition = 'opacity 5s';
+  popup.textContent = message;
+  
+  document.body.appendChild(popup);
+
+  setTimeout(() => {
+    popup.style.opacity = '0';
+    setTimeout(() => {
+      document.body.removeChild(popup);
+    }, 5000);
+  }, 100);
+}
+
 
 createQRCode();
 
