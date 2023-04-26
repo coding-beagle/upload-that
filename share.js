@@ -88,7 +88,7 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   fileElement.appendChild(fileNameElement);
 
   if (fileType.startsWith('image/')) {
-    createImagePreview(file, fileElement);
+    createImagePreview(fileId, fileElement);
   } else {
     const downloadLink = document.createElement('a');
     downloadLink.textContent = 'Download';
@@ -108,13 +108,13 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   document.querySelector('.file-list').appendChild(fileElement);
 }
 
+async function createImagePreview(fileId, fileElement) {
+  const imageUrl = `${API_BASE_URL}/download/${fileId}`;
 
-function createImagePreview(file, fileElement) {
-  const img = document.createElement('img');
-  img.src = URL.createObjectURL(file);
-  img.onload = () => URL.revokeObjectURL(img.src);
-  img.width = 200;
-  img.height = 200;
+  const image = new Image();
+  image.src = imageUrl;
+  image.width = 200;
+  image.height = 200;
 
-  fileElement.appendChild(img);
+  fileElement.appendChild(image);
 }
