@@ -52,7 +52,7 @@ const initializeDatabase = async () => {
 
 initializeDatabase()
   .then(() => {
-    app.listen(PORT, () => {
+    app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
     });
   })
