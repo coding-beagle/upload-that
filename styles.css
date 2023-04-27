@@ -173,6 +173,17 @@ body {
   }
 }
   
+.file-thumbnail {
+  width: 3rem; 
+  height: 3rem;  
+  object-fit: cover;  
+}
+
+.file-icon {
+  width: 1.5rem;  
+  height: 1.5rem; 
+}
+
   .btn-container {
     display: flex;
     position: fixed;

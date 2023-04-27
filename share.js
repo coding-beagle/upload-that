@@ -178,32 +178,28 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
 
   const fileElement = document.createElement('div');
   fileElement.className = 'file-item';
-  fileElement.setAttribute('data-file-id', fileId); // Add this line
-  fileElement.setAttribute('data-file-size', fileSize); // Set file size
+  fileElement.setAttribute('data-file-id', fileId);
+  fileElement.setAttribute('data-file-size', fileSize);
 
-  const fileNameElement = document.createElement('p'); // Rename this variable
-  fileNameElement.className = 'file-name'; // Add class name
+  const fileNameElement = document.createElement('p');
+  fileNameElement.className = 'file-name';
 
-  // Cut off the file name if it's too long, but ensure the file extension is still visible
-  let maxFileNameLength = 20; // Adjust this to your needs
+  let maxFileNameLength = 20;
   let fileName = fileDisplayName;
   let fileExtension = fileName.split('.').pop();
 
-  if (fileName.length > maxFileNameLength + fileExtension.length + 1) { // +1 for the dot
+  if (fileName.length > maxFileNameLength + fileExtension.length + 1) {
     fileName = fileName.substring(0, maxFileNameLength) + '...' + fileExtension;
   }
 
   fileNameElement.textContent = fileName;
-  fileElement.appendChild(fileNameElement);
 
   const fileContentElement = document.createElement('div');
   fileContentElement.className = 'file-content';
   fileContentElement.appendChild(fileNameElement);
 
-  if (fileType.startsWith('image/')) {
-    createImagePreview(fileId, fileElement);
-  } 
-  
+  createImagePreview(fileId, fileType, fileElement);
+
   fileElement.style.animation = "grow 1s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
 
   // Create a download link for all file types
@@ -240,19 +236,26 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
 
   fileElement.appendChild(fileContentElement);
   fileElement.appendChild(buttonsElement);
-  
 
   document.querySelector('.file-list').appendChild(fileElement);
 }
 
-async function createImagePreview(fileId, fileElement) {
-  const imageUrl = `${API_BASE_URL}/download/${fileId}`;
+async function createImagePreview(fileId, fileType, fileElement) {
+  const fileUrl = `${API_BASE_URL}/download/${fileId}`;
 
-  const image = new Image();
-  image.src = imageUrl;
-  image.width = 200;
-
-  fileElement.appendChild(image);
+  if (fileType.startsWith('image/')) {
+    const image = new Image();
+    image.src = fileUrl;
+    image.className = 'file-thumbnail'; // Add this line
+    fileElement.querySelector('.file-content').appendChild(image);
+  } else {
+    const fileTypeIcon = getFileTypeIcon(fileType);
+    const iconElement = document.createElement('img');
+    iconElement.src = fileTypeIcon;
+    iconElement.alt = fileType + ' icon';
+    iconElement.className = 'file-icon';  // You might want to style the icon
+    fileElement.querySelector('.file-content').appendChild(iconElement);
+  }
 }
 
 async function deleteFile(fileId) {
@@ -298,6 +301,27 @@ document.getElementById("new-session-button").addEventListener("click", () => {
   const randomBase64 = generateRandomBase64(16);
   window.location.href = `https://upload-that.onrender.com/share.html?id=${randomBase64}`;
 });
+
+function getFileTypeIcon(fileType) {
+  switch (fileType) {
+    case 'application/pdf':
+      return 'pdf.svg';
+    case 'application/msword':
+    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+      return 'word.svg';
+    case 'application/vnd.ms-excel':
+    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+      return 'excel.svg';
+    case 'application/vnd.ms-powerpoint':
+    case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+      return 'powerpoint.svg';
+    case 'text/plain':
+      return 'text.svg';
+    // Add more cases as needed
+    default:
+      return 'default.svg';
+  }
+}
 
 function generateRandomBase64(length) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
