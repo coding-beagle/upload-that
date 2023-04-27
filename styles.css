@@ -1,6 +1,7 @@
 body {
     font-family: 'Roboto', sans-serif;
-    background-color: #f8f9fa;
+    background-color: #EDEFF1;
+    color: #333;
   }
   
   .container {
@@ -9,13 +10,14 @@ body {
   }
   
   h1 {
-    font-size: 60px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #333;
   }
   
   p {
-    font-size: 24px;
+    font-size: 1.4rem;
     font-weight: 300;
     color: #666;
   }
@@ -160,6 +162,15 @@ body {
       opacity: 1;
       transform: translate(-50%, -50%);
     }
+}
+
+@keyframes grow {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
 }
   
   .btn-container {
