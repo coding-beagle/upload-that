@@ -123,7 +123,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     // Now you can store encryptedFile.content in the database, and you need to securely store the key and IV for decryption
 
     const query = `
-      INSERT INTO files (qr_code_id, file_name, file_size, file_content, file_type, salt, iv)
+      INSERT INTO files (qr_code_id, file_name, file_size, file_content, file_type, iv, salt)
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING id
     `;
