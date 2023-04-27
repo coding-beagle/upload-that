@@ -120,7 +120,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     
     const encryptedFile = {
       iv: iv.toString('hex'),
-      content: '\\x' + encrypted.toString('hex')
+      content: encrypted.toString('hex')
     };
   
     // Now you can store encryptedFile.content in the database, and you need to securely store the key and IV for decryption
@@ -130,9 +130,6 @@ app.post('/upload', upload.single('file'), async (req, res) => {
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING id
     `;
-
-    console.log('raw file_content type:', typeof file_content);
-    console.log('raw file_content value:', file_content);
 
     const result = await pool.query(query, [qr_code_id, file_name, file_size, encryptedFile.content, file_type, salt, encryptedFile.iv]);
     const file_id = result.rows[0].id;
@@ -173,10 +170,9 @@ app.get('/files/:qr_code_id', async (req, res) => {
       
       const decipher = crypto.createDecipheriv(algorithm, key, iv);
       
-      const encrypted = Buffer.from(file.file_content.slice(2), 'hex');  // Convert from hex to Buffer
-      console.log({encrypted});
+      const encrypted = Buffer.from(file.file_content, 'hex');  // Convert from hex to Buffer
       const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
-      console.log({decrypted});
+
       // Replace the encrypted file content with the decrypted content
       return {
         ...file,
