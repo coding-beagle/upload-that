@@ -113,7 +113,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     console.log('Generated IV:', iv.toString('hex'));
 
     const cipher = crypto.createCipheriv(algorithm, key, iv);
-    console.log({cipher});
+    console.log({key});
     const encrypted = Buffer.concat([cipher.update(file_content), cipher.final()]);
     
     const encryptedFile = {
@@ -172,7 +172,7 @@ app.get('/files/:qr_code_id', async (req, res) => {
       const key = crypto.pbkdf2Sync(qr_code_id, salt, 100000, 32, 'sha512');
       
       const decipher = crypto.createDecipheriv(algorithm, key, iv);
-      console.log({decipher});
+      console.log({key});
       const encrypted = Buffer.from(file.file_content.slice(2), 'hex');  // Convert from hex to Buffer
       const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
       
