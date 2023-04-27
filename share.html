@@ -19,14 +19,24 @@
     <p>Transferring files between devices made easy.</p>
 
     <div class="btn-container">
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#qrCodeModal">
-        <i class="fas fa-qrcode"></i>
-      </button>
-    
-      <button class="btn btn-primary privacy-btn" data-toggle="modal" data-target="#privacyModal">
-        <i class="fas fa-lock"></i>
-      </button>      
-    </div>
+      <div class="row">
+        <div class="col">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#qrCodeModal">
+            <i class="fas fa-qrcode"></i>
+          </button>
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#helpModal">
+            <i class="fas fa-question-circle"></i>
+          </button>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col">
+          <button class="btn btn-primary privacy-btn" data-toggle="modal" data-target="#privacyModal">
+            <i class="fas fa-lock"></i>
+          </button>
+        </div>
+      </div>
+    </div>    
     
     <div id="qr-code" class="mt-4"></div>
     <div class="file-upload-area mt-4">
@@ -64,6 +74,7 @@
           <div class="d-flex justify-content-center align-items-center">
             <div id="qr-code-modal" class="text-center"></div>
           </div>
+          <p>Or, copy and paste this URL onto your other device:</p>>
           <div class="input-group mt-3">
             <input type="text" class="form-control" id="qr-code-link" readonly>
             <div class="input-group-append">
@@ -99,5 +110,31 @@
     </div>
   </div>  
   
+  <div class="modal fade" tabindex="-1" role="dialog" id="helpModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="helpModalLabel">Help</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h6><i class="fas fa-upload"></i> Upload:</h6>
+          <p>Click on the upload button and choose the files you want to transfer.</p>
+          
+          <h6><i class="fas fa-plus-circle"></i> Start a New Session:</h6>
+          <p>Click on the 'Start a New Session' button to start a new file transfer session.</p>
+  
+          <h6><i class="fas fa-qrcode"></i> QR Code:</h6>
+          <p>Click on the QR Code button to generate a QR code for easy access from your other devices.</p>
+  
+          <h6><i class="fas fa-lock"></i> Privacy Policy:</h6>
+          <p>Click on the privacy policy button to learn more about our privacy policy and how we handle your files.</p>
+        </div>
+      </div>
+    </div>
+  </div>    
+
 </body>
 </html>
