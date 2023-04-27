@@ -165,9 +165,16 @@ app.get('/files/:qr_code_id', async (req, res) => {
       const key = crypto.pbkdf2Sync(qr_code_id, salt, 100000, 32, 'sha512');
       
       const decipher = crypto.createDecipheriv(algorithm, key, iv);
+
+      let encryptedContent = file.file_content;
+      
+      // If file_content is a buffer, convert it to a hex string
+      if (Buffer.isBuffer(file.file_content)) {
+        encryptedContent = file.file_content.toString('hex');
+      }
       const encryptedBuffer = Buffer.from(file.file_content.toString(), 'hex');
       const decrypted = Buffer.concat([decipher.update(encryptedBuffer), decipher.final()]);
-      
+
       // Replace the encrypted file content with the decrypted content
       return {
         ...file,
