@@ -156,7 +156,9 @@ app.get('/files/:qr_code_id', async (req, res) => {
     // Decrypt the file content
     const decryptedFiles = rows.map(file => {
       const algorithm = 'aes-256-cbc';
-      
+
+      console.log('file_content type:', typeof file.file_content);
+      console.log('file_content value:', file.file_content);
       // Convert salt and iv back to buffer
       const salt = Buffer.from(file.salt, 'hex');
       const iv = Buffer.from(file.iv, 'hex');
@@ -165,16 +167,8 @@ app.get('/files/:qr_code_id', async (req, res) => {
       const key = crypto.pbkdf2Sync(qr_code_id, salt, 100000, 32, 'sha512');
       
       const decipher = crypto.createDecipheriv(algorithm, key, iv);
-
-      let encryptedContent = file.file_content;
+      const decrypted = Buffer.concat([decipher.update(file.file_content), decipher.final()]);
       
-      // If file_content is a buffer, convert it to a hex string
-      if (Buffer.isBuffer(file.file_content)) {
-        encryptedContent = file.file_content.toString('hex');
-      }
-      const encryptedBuffer = Buffer.from(file.file_content.toString(), 'hex');
-      const decrypted = Buffer.concat([decipher.update(encryptedBuffer), decipher.final()]);
-
       // Replace the encrypted file content with the decrypted content
       return {
         ...file,
@@ -188,6 +182,7 @@ app.get('/files/:qr_code_id', async (req, res) => {
     res.status(500).send({ error: 'An error occurred while fetching the files' });
   }
 });
+
 
 app.get('/download/:file_id', async (req, res) => {
   try {
