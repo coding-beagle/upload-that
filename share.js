@@ -4,8 +4,12 @@ const randomBase64 = urlParams.get('id');
 const socket = io(API_BASE_URL);
 const link = `${window.location.origin}/share.html?id=${randomBase64}`;
 
-socket.on("connect", () => {
+socket.on("connect", async() => {
   socket.emit("joinRoom", randomBase64);
+  const files = await fetchFiles(randomBase64);
+  files.forEach(file => {
+    displayFile(file.file_name, file.file_size, file.file_type, file.id);
+  });
 });
 
 socket.on("fetchFiles", async () => {
