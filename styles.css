@@ -180,10 +180,12 @@ body {
   }
 
   .btn-container {
+    display: flex;
     position: fixed;
+    justify-content: flex-end;
     top: 10px;
     right: 10px;
-    z-index: 100;
+    margin-bottom: 15px;
   }
 
   .privacy-btn {

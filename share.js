@@ -315,8 +315,3 @@ if(!(isMobile())) {
 }
 
 document.getElementById('loader-container').style.display = 'none';
-
-function togglePrivacyModal() {
-  const modal = document.getElementById('privacy-modal');
-  modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
-}

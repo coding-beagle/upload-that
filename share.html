@@ -50,6 +50,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.0.3/html5-qrcode.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" crossorigin="anonymous"></script>
+  <script>
+    function togglePrivacyModal() {
+      const modal = document.getElementById('privacy-modal');
+      modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+    }
+  </script>
   <script src="share.js" type="module"></script>
 
   <div class="loader-container" id="loader-container">
