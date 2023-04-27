@@ -22,7 +22,7 @@ const pool = new Pool({
 });
 
 const corsOptions = {
-  origin: ["https://upload-that.onrender.com", "https://uploadthat-service.onrender.com"],
+  origin: ["https://upload-that.onrender.com", "https://uploadthat-service.onrender.com", "https://upload-that.com"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
