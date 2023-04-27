@@ -104,11 +104,13 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     // Generate a unique salt for each file. You could use the file ID, for example.
     // You need to store this salt to be able to recreate the key for decryption.
     const salt = crypto.randomBytes(16).toString('hex');
+    console.log('Generated salt:', salt);
 
     // Generate the encryption key from the qr_code_id and the salt
     const key = crypto.pbkdf2Sync(qr_code_id, salt, 100000, 32, 'sha512');
 
     const iv = crypto.randomBytes(16); // For AES, this is always 16
+    console.log('Generated IV:', iv.toString('hex'));
 
     const cipher = crypto.createCipheriv(algorithm, key, iv);
     const encrypted = Buffer.concat([cipher.update(file_content), cipher.final()]);
@@ -154,6 +156,9 @@ app.get('/files/:qr_code_id', async (req, res) => {
       // Convert salt and iv back to buffer
       const salt = Buffer.from(file.salt, 'hex');
       const iv = Buffer.from(file.iv, 'hex');
+
+      console.log('Retrieved salt:', salt);
+      console.log('Retrieved IV:', iv);
       
       // Recreate the encryption key from the qr_code_id and the salt
       const key = crypto.pbkdf2Sync(qr_code_id, salt, 100000, 32, 'sha512');
