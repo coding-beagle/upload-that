@@ -184,7 +184,7 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   const fileNameElement = document.createElement('p');
   fileNameElement.className = 'file-name';
 
-  let maxFileNameLength = 20;
+  let maxFileNameLength = 13;
   let fileName = fileDisplayName;
   let fileExtension = fileName.split('.').pop();
 
