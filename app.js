@@ -161,15 +161,15 @@ app.get('/files/:qr_code_id', async (req, res) => {
     const decryptedFiles = rows.map(file => {
       const algorithm = 'aes-256-cbc';
 
-
       // Convert salt and iv back to buffer
       const salt = Buffer.from(file.salt, 'hex');
-      console.log('Generated salt:', salt);
-      
+      const saltHexString = file.salt.toString('hex');
+      console.log('Generated saltHexString:', saltHexString);
+
       const iv = Buffer.from(file.iv, 'hex');
 
       // Recreate the encryption key from the qr_code_id and the salt
-      const key = crypto.pbkdf2Sync(qr_code_id, salt, 100000, 32, 'sha512');
+      const key = crypto.pbkdf2Sync(qr_code_id, saltHexString, 100000, 32, 'sha512');
       
       const decipher = crypto.createDecipheriv(algorithm, key, iv);
       console.log({key});
