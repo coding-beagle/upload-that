@@ -134,17 +134,6 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     const result = await pool.query(query, [qr_code_id, file_name, file_size, encryptedFile.content, file_type, salt, encryptedFile.iv]);
     const file_id = result.rows[0].id;
 
-    // Retrieve the data immediately after inserting it
-    const { rows } = await pool.query('SELECT file_content FROM files WHERE id = $1', [file_id]);
-    const retrievedContent = rows[0].file_content;
-
-    // Compare the original and retrieved data
-    if (encryptedFile.content === '\\x' + retrievedContent.toString('hex')) {
-      console.log('The original and retrieved data are identical.');
-    } else {
-      console.log('The original and retrieved data are not identical.');
-    }
-
     res.status(201).json({ message: 'File uploaded successfully', file_id });    
   } catch (error) {
     console.error(error);
@@ -180,6 +169,8 @@ app.get('/files/:qr_code_id', async (req, res) => {
       const key = crypto.pbkdf2Sync(qr_code_id, saltHexString, 100000, 32, 'sha512');
       
       const decipher = crypto.createDecipheriv(algorithm, key, iv);
+
+      console.log(`${iv}, ${saltHexString}, ${key}, ${file.file_content}`);
       
       const encrypted = Buffer.from(file.file_content, 'hex');  // Convert from hex to Buffer
       const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
