@@ -252,7 +252,7 @@ app.get('/download/:file_id', async (req, res) => {
   }
  
 
-  
+
 function hashFile(file) {
   const data = fs.readFileSync(file);
   const hash = crypto.createHash('sha256');
@@ -268,7 +268,7 @@ const key = crypto.pbkdf2Sync(qr_code_id, salt, 100000, 32, 'sha512');
 const iv = crypto.randomBytes(16); // For AES, this is always 16
 
 // Read the file into a Buffer
-const file_content = fs.readFileSync('snowfall_sonatas.jpeg');
+const file_content = fs.readFileSync('snowfall sonatas.jpeg');
 
 const cipher = crypto.createCipheriv(algorithm, key, iv);
 const encrypted = Buffer.concat([cipher.update(file_content), cipher.final()]);
@@ -281,7 +281,7 @@ const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
 fs.writeFileSync('decrypted_snowfall_sonatas.jpeg', decrypted);
 
 // Compare the hashes of the original and decrypted files
-const originalHash = hashFile('snowfall_sonatas.jpeg');
+const originalHash = hashFile('snowfall sonatas.jpeg');
 const decryptedHash = hashFile('decrypted_snowfall_sonatas.jpeg');
 
 console.log('Original file hash:', originalHash);
