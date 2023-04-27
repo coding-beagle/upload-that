@@ -165,6 +165,7 @@ app.get('/files/:qr_code_id', async (req, res) => {
       console.log('Retrieved saltHexString:', saltHexString);
 
       const iv = Buffer.from(file.iv, 'hex');
+      const ivHexString = file.iv.toString('hex');
       console.log('Retrieved IV:', ivHexString);
 
       // Recreate the encryption key from the qr_code_id and the salt
