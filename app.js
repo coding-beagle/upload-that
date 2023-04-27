@@ -129,11 +129,14 @@ app.post('/upload', upload.single('file'), async (req, res) => {
       RETURNING id
     `;
 
-    console.log('file_content type:', typeof file_content);
-    console.log('file_content value:', file_content);
+    console.log('raw file_content type:', typeof file_content);
+    console.log('raw file_content value:', file_content);
 
     const result = await pool.query(query, [qr_code_id, file_name, file_size, encryptedFile.content, file_type, salt, encryptedFile.iv]);
     const file_id = result.rows[0].id;
+
+    console.log('file_content type:', typeof encryptedFile.content);
+    console.log('file_content value:', encryptedFile.content);
 
     res.status(201).json({ message: 'File uploaded successfully', file_id });    
   } catch (error) {
@@ -157,7 +160,7 @@ app.get('/files/:qr_code_id', async (req, res) => {
       console.log('Retrieved file_content type:', typeof row.file_content);
       console.log('Retrieved file_content value:', row.file_content);
     });
-    
+
     // Decrypt the file content
     const decryptedFiles = rows.map(file => {
       const algorithm = 'aes-256-cbc';
