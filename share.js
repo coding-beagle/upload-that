@@ -94,7 +94,13 @@ document.getElementById('file-input').addEventListener('change', async (event) =
     if (file.size > maxFileSize) {
       // Create a pop-up that shakes and tells the user the file size is too large
       const errorMessage = 'File size is too large. Please upload a file smaller than 25 MB.';
+
+      const oldErrorPopup = document.getElementById('errorPopup');
+      if (oldErrorPopup) {
+        oldErrorPopup.remove(); // remove the old message
+      }
       const errorPopup = document.createElement('div');
+      errorPopup.id = 'errorPopup'; // add an ID
       errorPopup.textContent = errorMessage;
       errorPopup.style.position = 'fixed';
       errorPopup.style.top = '50%';
@@ -158,7 +164,6 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
     const existingFileSize = Number(existingFiles[i].getAttribute('data-file-size'));
   
     if (existingFileName === fileDisplayName && existingFileSize === fileSize) {
-      console.log(`File ${fileDisplayName} with size ${fileSize} already exists in the list.`);
       return;
     }
   }
