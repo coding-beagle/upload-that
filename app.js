@@ -94,8 +94,6 @@ http.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-const crypto = require('crypto');
-
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
     const { qr_code_id } = req.body;
