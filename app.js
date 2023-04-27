@@ -3,6 +3,7 @@ const multer = require('multer');
 const { Pool } = require('pg');
 const cors = require('cors');
 const crypto = require('crypto');
+const fs = require('fs');
 
 const app = express();
 const http = require('http').Server(app);
@@ -170,7 +171,7 @@ app.get('/files/:qr_code_id', async (req, res) => {
       
       const decipher = crypto.createDecipheriv(algorithm, key, iv);
       
-      const encrypted = Buffer.from(file.file_content.slice(2), 'hex');  // Convert from hex to Buffer
+      const encrypted = Buffer.from(file.file_content, 'hex');  // Convert from hex to Buffer
       const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
       
       // Replace the encrypted file content with the decrypted content
@@ -249,4 +250,45 @@ app.get('/download/:file_id', async (req, res) => {
       console.error('An error occurred while deleting old files:', error);
     }
   }
+ 
+
   
+function hashFile(file) {
+  const data = fs.readFileSync(file);
+  const hash = crypto.createHash('sha256');
+  hash.update(data);
+  return hash.digest('hex');
+}
+  
+// Encryption
+const algorithm = 'aes-256-cbc';
+const qr_code_id = 'someTestID';  // Replace with a real ID for your tests
+const salt = crypto.randomBytes(16).toString('hex');
+const key = crypto.pbkdf2Sync(qr_code_id, salt, 100000, 32, 'sha512');
+const iv = crypto.randomBytes(16); // For AES, this is always 16
+
+// Read the file into a Buffer
+const file_content = fs.readFileSync('snowfall_sonatas.jpeg');
+
+const cipher = crypto.createCipheriv(algorithm, key, iv);
+const encrypted = Buffer.concat([cipher.update(file_content), cipher.final()]);
+
+// Decryption
+const decipher = crypto.createDecipheriv(algorithm, key, iv);
+const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
+
+// Write the decrypted data to a new file
+fs.writeFileSync('decrypted_snowfall_sonatas.jpeg', decrypted);
+
+// Compare the hashes of the original and decrypted files
+const originalHash = hashFile('snowfall_sonatas.jpeg');
+const decryptedHash = hashFile('decrypted_snowfall_sonatas.jpeg');
+
+console.log('Original file hash:', originalHash);
+console.log('Decrypted file hash:', decryptedHash);
+
+if (originalHash === decryptedHash) {
+  console.log('The original and decrypted files are identical.');
+} else {
+  console.log('The original and decrypted files are not identical.');
+}
