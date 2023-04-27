@@ -129,6 +129,9 @@ app.post('/upload', upload.single('file'), async (req, res) => {
       RETURNING id
     `;
 
+    console.log('file_content type:', typeof file_content);
+    console.log('file_content value:', file_content);
+
     const result = await pool.query(query, [qr_code_id, file_name, file_size, encryptedFile.content, file_type, salt, encryptedFile.iv]);
     const file_id = result.rows[0].id;
 
@@ -149,6 +152,9 @@ app.get('/files/:qr_code_id', async (req, res) => {
       WHERE qr_code_id = $1
     `;
     const { rows } = await pool.query(query, [qr_code_id]);
+
+    console.log('file_content type:', typeof file_content);
+    console.log('file_content value:', file_content);
 
     // Decrypt the file content
     const decryptedFiles = rows.map(file => {
