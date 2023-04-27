@@ -153,13 +153,13 @@ app.get('/files/:qr_code_id', async (req, res) => {
     `;
     const { rows } = await pool.query(query, [qr_code_id]);
 
-    console.log('file_content type:', typeof file.file_content);
-    console.log('file_content value:', file.file_content);
-
     // Decrypt the file content
     const decryptedFiles = rows.map(file => {
       const algorithm = 'aes-256-cbc';
       
+      console.log('file_content type:', typeof file.file_content);
+      console.log('file_content value:', file.file_content);
+
       // Convert salt and iv back to buffer
       const salt = Buffer.from(file.salt, 'hex');
       const iv = Buffer.from(file.iv, 'hex');
