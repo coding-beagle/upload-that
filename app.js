@@ -3,7 +3,6 @@ const multer = require('multer');
 const { Pool } = require('pg');
 const cors = require('cors');
 const crypto = require('crypto');
-const { unpad } = require('crypto-utils');
 
 const app = express();
 const http = require('http').Server(app);
@@ -173,13 +172,11 @@ app.get('/files/:qr_code_id', async (req, res) => {
       
       const encrypted = Buffer.from(file.file_content.slice(2), 'hex');  // Convert from hex to Buffer
       const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
-
-      const unpadded = unpad(decrypted, algorithm);
-
+      
       // Replace the encrypted file content with the decrypted content
       return {
         ...file,
-        file_content: unpadded
+        file_content: decrypted
       };
     });
 
