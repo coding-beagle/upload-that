@@ -139,7 +139,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     const retrievedContent = rows[0].file_content;
 
     // Compare the original and retrieved data
-    if (encryptedFile.content === retrievedContent) {
+    if (encryptedFile.content === retrievedContent.slice(2)) {
       console.log('The original and retrieved data are identical.');
     } else {
       console.log('The original and retrieved data are not identical.');
