@@ -299,7 +299,7 @@ function createPopup(message, bgColor) {
 
 document.getElementById("new-session-button").addEventListener("click", () => {
   const randomBase64 = generateRandomBase64(16);
-  window.location.href = `https://upload-that.onrender.com/share.html?id=${randomBase64}`;
+  window.location.href = `https://upload-that.com/share.html?id=${randomBase64}`;
 });
 
 function getFileTypeIcon(fileType) {
