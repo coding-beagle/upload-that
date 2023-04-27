@@ -100,11 +100,12 @@ document.getElementById('file-input').addEventListener('change', async (event) =
       errorPopup.style.top = '50%';
       errorPopup.style.left = '50%';
       errorPopup.style.transform = 'translate(-50%, -50%)';
-      errorPopup.style.backgroundColor = 'red';
+      errorPopup.style.backgroundColor = 'lightcoral';
+      errorPopup.style.color = 'black'; // this line changes the text color to black
       errorPopup.style.padding = '20px';
       errorPopup.style.borderRadius = '10px';
-      errorPopup.style.animation = 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both';
-      errorPopup.style.animationIterationCount = '3';
+      errorPopup.style.animation = 'fadeInShake 1s ease both';
+      errorPopup.style.animationIterationCount = '1';
       errorPopup.style.zIndex = '1000';
       document.body.appendChild(errorPopup);
 
@@ -200,6 +201,9 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   const downloadButton = document.createElement('button');
   downloadButton.className = 'btn btn-primary btn-sm ml-2';
   downloadButton.innerHTML = '<i class="fas fa-download"></i>';
+  downloadButton.style.display = 'flex';
+  downloadButton.style.justifyContent = 'center';
+  downloadButton.style.alignItems = 'center';
   downloadButton.addEventListener('click', () => {
     window.location.href = `${API_BASE_URL}/download/${fileId}`;
   });
@@ -207,6 +211,9 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   const removeButton = document.createElement('button');
   removeButton.className = 'btn btn-danger btn-sm ml-2';
   removeButton.innerHTML = '<i class="fas fa-times"></i>';
+  removeButton.style.display = 'flex';
+  removeButton.style.justifyContent = 'center';
+  removeButton.style.alignItems = 'center';
   removeButton.addEventListener('click', async () => {
     try {
       await deleteFile(fileId);
