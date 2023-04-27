@@ -20,9 +20,9 @@
         <i class="fas fa-qrcode"></i>
       </button>
     
-      <button class="btn btn-primary privacy-btn" onclick="togglePrivacyModal()">
+      <button class="btn btn-primary privacy-btn" data-toggle="modal" data-target="#privacyModal">
         <i class="fas fa-lock"></i>
-      </button>
+      </button>      
     </div>
     
     <div id="privacy-modal" class="privacy-modal">
@@ -50,12 +50,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.0.3/html5-qrcode.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" crossorigin="anonymous"></script>
-  <script>
-    function togglePrivacyModal() {
-      const modal = document.getElementById('privacy-modal');
-      modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
-    }
-  </script>
   <script src="share.js" type="module"></script>
 
   <div class="loader-container" id="loader-container">
@@ -81,6 +75,30 @@
               <button class="btn btn-outline-secondary" type="button" id="copy-link-btn">Copy</button>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>  
+
+  <div class="modal fade" tabindex="-1" role="dialog" id="privacyModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="privacyModalLabel">Privacy Policy</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>
+            Here at UploadThat, we value your privacy and the security of your files. 
+            All files are encrypted using AES encryption before they are uploaded. 
+            That's like trying to find a needle in not just one, but hundreds of haystacks!
+          </p>
+          <p>
+            Files are deleted after everyone in the session disconnects, or after a certain time period. 
+            We care about your privacy as much as you do!
+          </p>
         </div>
       </div>
     </div>
