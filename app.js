@@ -99,6 +99,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     const { qr_code_id } = req.body;
     const { originalname: file_name, mimetype: file_type, size: file_size, buffer: file_content } = req.file;
 
+    console.log({qr_code_id});
+
     const algorithm = 'aes-256-cbc';
     
     // Generate a unique salt for each file. You could use the file ID, for example.
@@ -145,6 +147,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 app.get('/files/:qr_code_id', async (req, res) => {
   try {
     const { qr_code_id } = req.params;
+
+    console.log({qr_code_id});
 
     const query = `
       SELECT id, file_name, file_size, file_type, file_content, iv, salt
