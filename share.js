@@ -198,10 +198,6 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   fileContentElement.className = 'file-content';
   fileContentElement.appendChild(fileNameElement);
 
-  createImagePreview(fileId, fileType, fileElement);
-
-  fileElement.style.animation = "grow 1s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
-
   // Create a download link for all file types
   const downloadButton = document.createElement('button');
   downloadButton.className = 'btn btn-primary btn-sm ml-2';
@@ -238,6 +234,10 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   fileElement.appendChild(buttonsElement);
 
   document.querySelector('.file-list').appendChild(fileElement);
+
+  createImagePreview(fileId, fileType, fileElement);
+
+  fileElement.style.animation = "grow 1s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
 }
 
 async function createImagePreview(fileId, fileType, fileElement) {
