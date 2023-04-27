@@ -89,6 +89,7 @@ document.getElementById('file-input').addEventListener('change', async (event) =
   const fileList = event.target.files;
   const maxFileSize = 25 * 1024 * 1024; // 25 MB in bytes
   const file = fileList[0];
+  document.getElementById('loader-container').style.display = 'flex';
 
   if (fileList.length > 0) {
     if (file.size > maxFileSize) {
@@ -127,6 +128,7 @@ document.getElementById('file-input').addEventListener('change', async (event) =
     const fileId = await uploadFile(file);
     displayFile(file.name, file.size, file.type, fileId);
     
+    document.getElementById('loader-container').style.display = 'none';
     // Notify the server that a new file was uploaded
     socket.emit("fileUploaded", randomBase64);
   }
