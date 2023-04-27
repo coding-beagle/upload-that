@@ -177,7 +177,6 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   }
 
   const fileElement = document.createElement('div');
-  fileElement.style.animation = "grow 1s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
   fileElement.className = 'file-item';
   fileElement.setAttribute('data-file-id', fileId); // Add this line
   fileElement.setAttribute('data-file-size', fileSize); // Set file size
@@ -204,6 +203,8 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
   if (fileType.startsWith('image/')) {
     createImagePreview(fileId, fileElement);
   } 
+  
+  fileElement.style.animation = "grow 1s cubic-bezier(0.68, -0.55, 0.265, 1.55)";
 
   // Create a download link for all file types
   const downloadButton = document.createElement('button');
