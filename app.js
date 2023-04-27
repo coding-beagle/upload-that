@@ -182,6 +182,7 @@ app.get('/files/:qr_code_id', async (req, res) => {
       const decipher = crypto.createDecipheriv(algorithm, key, iv);
       
       const encrypted = Buffer.from(file.file_content.slice(1), 'hex');  // Convert from hex to Buffer
+      console.log({encrypted});
       const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
       
       // Replace the encrypted file content with the decrypted content
