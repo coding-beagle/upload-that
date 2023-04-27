@@ -190,13 +190,7 @@ function displayFile(fileDisplayName, fileSize, fileType, fileId) {
 
   if (fileType.startsWith('image/')) {
     createImagePreview(fileId, fileElement);
-  } else {
-    const downloadLink = document.createElement('a');
-    downloadLink.textContent = 'Download';
-    downloadLink.href = `${API_BASE_URL}/download/${fileId}`;
-    downloadLink.download = fileDisplayName; // Update the reference here
-    fileElement.appendChild(downloadLink);
-  }
+  } 
 
   // Create a download link for all file types
   const downloadButton = document.createElement('button');
