@@ -11,13 +11,28 @@
 </head>
 <body>
   <div class="container">
-    <div class="open-modal-btn">
+    <button id="new-session-button" class="btn btn-primary" style="position: fixed; top: 10px; left: 10px;">Start a New Session</button>    
+    <h1 class="mt-4">UploadThat</h1>
+    <p>Transferring files between devices made easy.</p>
+
+    <div class="btn-container">
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#qrCodeModal">
         <i class="fas fa-qrcode"></i>
       </button>
+    
+      <button class="btn btn-primary privacy-btn" onclick="togglePrivacyModal()">
+        <i class="fas fa-lock"></i>
+      </button>
     </div>
-    <button id="new-session-button" class="btn btn-primary" style="position: fixed; top: 10px; left: 10px;">Start a New Session</button>    
-    <h1 class="mt-4">UploadThat</h1>
+    
+    <div id="privacy-modal" class="privacy-modal">
+      <div class="privacy-modal-header">Privacy</div>
+      <div class="privacy-modal-content">
+        We use AES-256 encryption when files are uploaded to our system. That means even if someone intercepted your file, they would need more time than the age of the universe to decrypt it... and that's if they were lucky! Files are deleted once everyone in the session disconnects or after a certain time period. So, rest easy knowing your files are safe and sound.
+      </div>
+      <button class="btn privacy-btn" onclick="togglePrivacyModal()">Close</button>
+    </div>
+
     <div id="qr-code" class="mt-4"></div>
     <div class="file-upload-area mt-4">
       <label for="file-input" class="btn btn-primary">
