@@ -96,12 +96,14 @@ body {
   .file-item .buttons {
     display: flex;
     justify-content: space-between;
+    padding-top: 0.5rem;
     gap: 5px;
   }
   
   .file-item button {
     flex: 1;
     width: 30px; /* adjust this value to change the maximum width of buttons */
+    height: 30px;
   }
   
   .loader-container {
