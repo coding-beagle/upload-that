@@ -3,7 +3,6 @@ const multer = require('multer');
 const { Pool } = require('pg');
 const cors = require('cors');
 const crypto = require('crypto');
-const fs = require('fs');
 
 const app = express();
 const http = require('http').Server(app);
@@ -135,6 +134,17 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     const result = await pool.query(query, [qr_code_id, file_name, file_size, encryptedFile.content, file_type, salt, encryptedFile.iv]);
     const file_id = result.rows[0].id;
 
+    // Retrieve the data immediately after inserting it
+    const { rows } = await pool.query('SELECT file_content FROM files WHERE id = $1', [file_id]);
+    const retrievedContent = rows[0].file_content;
+
+    // Compare the original and retrieved data
+    if (encryptedFile.content === retrievedContent) {
+      console.log('The original and retrieved data are identical.');
+    } else {
+      console.log('The original and retrieved data are not identical.');
+    }
+
     res.status(201).json({ message: 'File uploaded successfully', file_id });    
   } catch (error) {
     console.error(error);
@@ -251,44 +261,3 @@ app.get('/download/:file_id', async (req, res) => {
     }
   }
  
-
-
-function hashFile(file) {
-  const data = fs.readFileSync(file);
-  const hash = crypto.createHash('sha256');
-  hash.update(data);
-  return hash.digest('hex');
-}
-  
-// Encryption
-const algorithm = 'aes-256-cbc';
-const qr_code_id = 'someTestID';  // Replace with a real ID for your tests
-const salt = crypto.randomBytes(16).toString('hex');
-const key = crypto.pbkdf2Sync(qr_code_id, salt, 100000, 32, 'sha512');
-const iv = crypto.randomBytes(16); // For AES, this is always 16
-
-// Read the file into a Buffer
-const file_content = fs.readFileSync('snowfall sonatas.jpeg');
-
-const cipher = crypto.createCipheriv(algorithm, key, iv);
-const encrypted = Buffer.concat([cipher.update(file_content), cipher.final()]);
-
-// Decryption
-const decipher = crypto.createDecipheriv(algorithm, key, iv);
-const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
-
-// Write the decrypted data to a new file
-fs.writeFileSync('decrypted_snowfall_sonatas.jpeg', decrypted);
-
-// Compare the hashes of the original and decrypted files
-const originalHash = hashFile('snowfall sonatas.jpeg');
-const decryptedHash = hashFile('decrypted_snowfall_sonatas.jpeg');
-
-console.log('Original file hash:', originalHash);
-console.log('Decrypted file hash:', decryptedHash);
-
-if (originalHash === decryptedHash) {
-  console.log('The original and decrypted files are identical.');
-} else {
-  console.log('The original and decrypted files are not identical.');
-}
