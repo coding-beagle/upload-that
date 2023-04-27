@@ -148,8 +148,6 @@ app.get('/files/:qr_code_id', async (req, res) => {
   try {
     const { qr_code_id } = req.params;
 
-    console.log({qr_code_id});
-
     const query = `
       SELECT id, file_name, file_size, file_type, file_content, iv, salt
       FROM files
@@ -164,9 +162,10 @@ app.get('/files/:qr_code_id', async (req, res) => {
       // Convert salt and iv back to buffer
       const salt = Buffer.from(file.salt, 'hex');
       const saltHexString = file.salt.toString('hex');
-      console.log('Generated saltHexString:', saltHexString);
+      console.log('Retrieved saltHexString:', saltHexString);
 
       const iv = Buffer.from(file.iv, 'hex');
+      console.log('Retrieved IV:', iv);
 
       // Recreate the encryption key from the qr_code_id and the salt
       const key = crypto.pbkdf2Sync(qr_code_id, saltHexString, 100000, 32, 'sha512');
