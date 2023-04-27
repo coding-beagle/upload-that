@@ -170,7 +170,10 @@ app.get('/files/:qr_code_id', async (req, res) => {
       
       const decipher = crypto.createDecipheriv(algorithm, key, iv);
 
-      console.log(`${iv}, ${saltHexString}, ${key}, ${file.file_content}`);
+      console.log({key});
+      console.log({iv});
+      console.log({saltHex});
+      console.log(file.file_content);
       
       const encrypted = Buffer.from(file.file_content, 'hex');  // Convert from hex to Buffer
       const decrypted = Buffer.concat([decipher.update(encrypted), decipher.final()]);
