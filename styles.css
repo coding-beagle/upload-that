@@ -2,6 +2,7 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #EDEFF1;
     color: #333;
+    overflow-x: hidden;
   }
   
   .container {
