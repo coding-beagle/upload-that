@@ -35,11 +35,21 @@ app.use(express.urlencoded({ extended: true }));
 io.on('connection', (socket) => {
   let roomId; // Define roomId in the outer scope
 
-  socket.on('joinRoom', (room) => {
+  socket.on('joinRoom', async (room) => {
     roomId = room; // Update roomId when a user joins a room
     socket.join(roomId);
     socket.to(roomId).emit('userJoined');
     deleteOldFiles();
+
+    // Update analytics table
+    const analyticsQuery = `
+      INSERT INTO analytics (date, num_unique_rooms)
+      VALUES (NOW(), 1)
+      ON CONFLICT (date)
+      DO UPDATE SET num_unique_rooms = analytics.num_unique_rooms + 1
+    `;
+    await pool.query(analyticsQuery);
+
   });
 
   socket.on('fileUploaded', () => {
@@ -128,6 +138,14 @@ app.post('/upload', upload.single('file'), async (req, res) => {
 
     const result = await pool.query(query, [qr_code_id, file_name, file_size, encryptedFile.content, file_type, salt, encryptedFile.iv]);
     const file_id = result.rows[0].id;
+
+    const analyticsQuery = `
+      INSERT INTO analytics (date, num_files_written)
+      VALUES (NOW(), 1)
+      ON CONFLICT (date)
+      DO UPDATE SET num_files_written = analytics.num_files_written + 1
+    `;
+    await pool.query(analyticsQuery);
 
     res.status(201).json({ message: 'File uploaded successfully', file_id });    
   } catch (error) {
