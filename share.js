@@ -389,5 +389,5 @@ let dropArea = document.getElementById('file-upload-area');
   }
 
   function handleFiles(files) {
-    ([...files]).forEach(uploadFile(files));
-  }
+    ([...files]).forEach(uploadFile);
+}
