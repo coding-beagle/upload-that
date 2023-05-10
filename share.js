@@ -390,33 +390,3 @@ if(!(isMobile())) {
 }
 
 document.getElementById('loader-container').style.display = 'none';
-
-async function uploadFile(file) {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('qr_code_id', `${randomBase64}`);
-
-    xhr.open('POST', `${API_BASE_URL}/upload`, true);
-
-    xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const progress = (event.loaded / event.total) * 100;
-        document.getElementById('upload-progress-bar').style.width = `${progress}%`;
-      }
-    };
-
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        const responseText = xhr.responseText;
-        const result = JSON.parse(responseText);
-        resolve(result.file_id);
-      } else {
-        reject(new Error('An error occurred while uploading the file'));
-      }
-    };
-
-    xhr.send(formData);
-  });
-}
