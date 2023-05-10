@@ -3,46 +3,6 @@ const urlParams = new URLSearchParams(window.location.search);
 const randomBase64 = urlParams.get('id');
 const socket = io(API_BASE_URL);
 const link = `${window.location.origin}/share.html?id=${randomBase64}`;
-const dropArea = document.getElementById('file-upload-area');
-
-['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-  dropArea.addEventListener(eventName, preventDefaults, false)
-});
-
-function preventDefaults (e) {
-  e.preventDefault();
-  e.stopPropagation();
-}
-
-['dragenter', 'dragover'].forEach(eventName => {
-  dropArea.addEventListener(eventName, highlight, false)
-});
-
-['dragleave', 'drop'].forEach(eventName => {
-  dropArea.addEventListener(eventName, unhighlight, false)
-});
-
-function highlight(e) {
-  dropArea.style.color = '#4CAF50';
-  dropArea.style.borderColor = '#4CAF50';
-}
-
-function unhighlight(e) {
-  dropArea.style.color = '#333';
-  dropArea.style.borderColor = '#4CAF50';
-}
-
-dropArea.addEventListener('drop', handleDrop, false)
-
-function handleDrop(e) {
-  let dt = e.dataTransfer;
-  let files = dt.files;
-  handleFiles(files);
-}
-
-function handleFiles(files) {
-  ([...files]).forEach(uploadFile);
-}
 
 socket.on("connect", async() => {
   socket.emit("joinRoom", randomBase64);
@@ -164,8 +124,6 @@ document.getElementById('file-input').addEventListener('change', async (event) =
       return;
     }
 
-    document.getElementById('upload-progress-bar-container').style.display = 'block';
-    document.getElementById('upload-progress-bar').style.width = '0%';
     socket.emit("fileUploading");
     const fileId = await uploadFile(file);
     displayFile(file.name, file.size, file.type, fileId);
@@ -390,3 +348,46 @@ if(!(isMobile())) {
 }
 
 document.getElementById('loader-container').style.display = 'none';
+
+// drag and drop shenangians:
+
+let dropArea = document.getElementById('file-upload-area');
+
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false)
+  });
+
+  function preventDefaults (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false)
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false)
+  });
+
+  function highlight(e) {
+    dropArea.style.color = '#4CAF50';
+    dropArea.style.borderColor = '#4CAF50';
+  }
+
+  function unhighlight(e) {
+    dropArea.style.color = '#333';
+    dropArea.style.borderColor = '#4CAF50';
+  }
+
+  dropArea.addEventListener('drop', handleDrop, false)
+
+  function handleDrop(e) {
+    let dt = e.dataTransfer;
+    let files = dt.files;
+    handleFiles(files);
+  }
+
+  function handleFiles(files) {
+    ([...files]).forEach(uploadFile);
+  }
