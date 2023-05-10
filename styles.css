@@ -248,3 +248,15 @@ body {
     height: 3rem; /* adjust as needed */
     width: auto;
 }
+
+#file-upload-area {
+  border: 2px dashed #4CAF50;
+  padding: 20px;
+  text-align: center;
+  color: #333;
+  cursor: pointer;
+}
+
+#file-upload-area:hover {
+  color: #4CAF50;
+}
