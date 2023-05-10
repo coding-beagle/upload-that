@@ -352,6 +352,8 @@ document.getElementById('loader-container').style.display = 'none';
 // drag and drop shenangians:
 
 let dropArea = document.getElementById('file-upload-area');
+let fileInput = document.getElementById('file-input');
+let clicked = false; // this flag checks whether the drop area was clicked
 
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
     dropArea.addEventListener(eventName, preventDefaults, false)
@@ -380,10 +382,43 @@ let dropArea = document.getElementById('file-upload-area');
     dropArea.style.borderColor = '#4CAF50';
   }
 
+  dropArea.addEventListener('click', () => {
+    clicked = true; // set the flag to true when the drop area is clicked
+    fileInput.click();
+  }, false);
+
   dropArea.addEventListener('drop', async (event) => {
-    preventDefaults(event);
-    unhighlight(event);
+    clicked = false; // reset the flag
+    handleFileChange(event); // call the file handling function
+  }, false);
+
+  function handleDrop(e) {
+    let dt = e.dataTransfer;
+    let files = dt.files;
+    handleFiles(files);
+  }
+
+  function handleFiles(files) {
+    ([...files]).forEach(uploadFile);
+}
+
+dropArea.addEventListener('click', () => {
+    document.getElementById('file-input').click();
+  }, false);
   
+  document.getElementById('file-input').addEventListener('change', async (event) => {
+    handleFileChange(event);
+  });
+
+  fileInput.addEventListener('change', async (event) => {
+    // only process the upload if the change event was triggered by a click on the drop area
+    if (clicked) {
+      clicked = false; // reset the flag
+      handleFileChange(event); // call the file handling function
+    }
+  });
+
+async function handleFileChange(event){
     const fileList = event.dataTransfer.files;
     const maxFileSize = 25 * 1024 * 1024; // 25 MB in bytes
     const file = fileList[0];
@@ -429,67 +464,4 @@ let dropArea = document.getElementById('file-upload-area');
       // Notify the server that a new file was uploaded
       socket.emit("fileUploaded", randomBase64);
     }
-  }, false);
-
-  function handleDrop(e) {
-    let dt = e.dataTransfer;
-    let files = dt.files;
-    handleFiles(files);
-  }
-
-  function handleFiles(files) {
-    ([...files]).forEach(uploadFile);
 }
-
-dropArea.addEventListener('click', () => {
-    document.getElementById('file-input').click();
-  }, false);
-  
-  document.getElementById('file-input').addEventListener('change', async (event) => {
-    const fileList = event.target.files;
-    const maxFileSize = 25 * 1024 * 1024; // 25 MB in bytes
-    const file = fileList[0];
-    document.getElementById('loader-container').style.display = 'flex';
-  
-    if (fileList.length > 0) {
-      if (file.size > maxFileSize) {
-          // Create a pop-up that shakes and tells the user the file size is too large
-      const errorMessage = 'File size is too large. Please upload a file smaller than 25 MB.';
-
-      const oldErrorPopup = document.getElementById('errorPopup');
-      if (oldErrorPopup) {
-        oldErrorPopup.remove(); // remove the old message
-      }
-      const errorPopup = document.createElement('div');
-      errorPopup.id = 'errorPopup'; // add an ID
-      errorPopup.textContent = errorMessage;
-      errorPopup.style.position = 'fixed';
-      errorPopup.style.top = '50%';
-      errorPopup.style.left = '50%';
-      errorPopup.style.transform = 'translate(-50%, -50%)';
-      errorPopup.style.backgroundColor = 'lightcoral';
-      errorPopup.style.color = 'black'; // this line changes the text color to black
-      errorPopup.style.padding = '20px';
-      errorPopup.style.borderRadius = '10px';
-      errorPopup.style.animation = 'fadeInShake 1s ease both';
-      errorPopup.style.animationIterationCount = '1';
-      errorPopup.style.zIndex = '1000';
-      document.body.appendChild(errorPopup);
-
-      // Remove the error popup after 5 seconds
-      setTimeout(() => {
-        errorPopup.remove();
-      }, 5000);
-        return;
-      }
-  
-      socket.emit("fileUploading");
-      const fileId = await uploadFile(file);
-      displayFile(file.name, file.size, file.type, fileId);
-  
-      document.getElementById('loader-container').style.display = 'none';
-      // Notify the server that a new file was uploaded
-      socket.emit("fileUploaded", randomBase64);
-    }
-  });
-  
